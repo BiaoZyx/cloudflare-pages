@@ -43,3 +43,7 @@ theme = 'PaperMod'
   ShowToc = true
   # 显示文章分类
   ShowPostNavLinks = true
+
+  homeInfoParams:
+    Title: "👋Hi, there! Welcome to my Campsite. "
+    Content: "一个由 Linux 爱好者维护的小小技术站点。\n这里记录系统探索、KISS 哲学与数字营地的搭建实践。"
