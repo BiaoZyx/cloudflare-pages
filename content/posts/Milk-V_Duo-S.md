@@ -2,7 +2,7 @@
 title = "Milk-V Duo S 开箱与初体验"
 date = 2025-06-29
 draft = false
-tags = ["Milk-V Duo S", "硬件", "嵌入式", "Alpine"]
+tags = ["Milk-V Duo S", "硬件", "嵌入式"]
 categories = ["硬件折腾"]
 author = "BiaoZyx"
 +++
@@ -10,15 +10,15 @@ author = "BiaoZyx"
 # 一、初识
 盼啊盼，终于盼来了这块Milk-V Duo S。先看一下Duo S的包装。（图1）
 > 图1
-> ![image](/images/Milk-V_Duo-S_with_a_box.png)
+> ![image](/images/Milk-V_Duo-S/Milk-V_Duo-S_with_a_box.png)
 
 可以看到，外圈有一层塑料外壳，并且材质很好，摸起来很顺滑。而用普通Milk-V Duo比较，就没有这种待遇了。
 再来看看板子的结构，（图2.1为Duo S，图2.2为Duo）
 > 图2.1
-> ![image](/images/Milk-V_Duo-S.png)
+> ![image](/images/Milk-V_Duo-S/Milk-V_Duo-S.png)
 
 > 图2.2
-> ![image](/images/Milk-V_Duo.png)
+> ![image](/images/Milk-V_Duo-S/Milk-V_Duo.png)
 
 可以看到，Duo S最显眼的地方就是新增的：
 1. 4排GPIO引脚（52针），并且上面那2排附有色彩标签；
@@ -37,7 +37,7 @@ author = "BiaoZyx"
 初识过后，就应该初始化了（标题还挺押韵）。根据官网的教程，首先，我准备了一张32GB的Kingston的MicroSD卡和一个绿联的USB 3.0读卡器。（如图3）
 
 > 图3
-> ![image](/images/a_cardreader_and_a_microSD.png)
+> ![image](/images/Milk-V_Duo-S/a_cardreader_and_a_microSD.png)
 
 接着，我需要准备一个烧录工具。由于现在我使用的是Linux，所以我本来选择的是balenaEtcher。
 
@@ -46,7 +46,7 @@ author = "BiaoZyx"
 如果你想体验新架构，那么烧录以下镜像链接里的milkv-duos-musl-riscv64-sd_v2.0.1.img.zip镜像即可。（官网文档链接如图4）
 
 > 图4
->![image](/images/PrtScr_of_Milk-V-doc.png)
+>![image](/images/Milk-V_Duo-S/PrtScr_of_Milk-V-doc.png)
 
 但如果你想现在生态更磅礴一点的arm架构遨游，那么你可以选择milkv-duos-glibc-arm64-sd_v2.0.1.img.zip。
 
@@ -55,7 +55,7 @@ author = "BiaoZyx"
 烧录完成过后，卸下读卡器和SD卡并装载进Duo S，注意将反面按钮选择至正确的架构！（按钮如图5左上角金色螺钉孔右边小开关，左边是ARM，右边是RISC-V，最好仔细观察开关下PCB上文字！）
 
 > 图5，不小心拍竖过来了，最右边是正上方！
->![image](/images/the_back_of_Milk-V_Duo-S.png)
+>![image](/images/Milk-V_Duo-S/the_back_of_Milk-V_Duo-S.png)
 
 这里我用的是ARM架构，所以会将它移到左边。
 
@@ -399,7 +399,7 @@ chmod +x mct
 由于ash功能太少，我这里的ash还有点问题（如图6），所以推荐你们使用bash，使用`opkg install bash`来安装，再使用`opkg install shadow`安装一个可以切换默认shell的工具，最后使用`chsh /opt/bin/bash`设置默认shell为bash。注意，`chsh`使用时会提示输入密码，默认不显示。
 
 > 图6，令人无语的ash……
-> ![image](/images/ash.png)
+> ![image](/images/Milk-V_Duo-S/ash.png)
 
 那么回归正题，我们来美化一下bash，下面是.bashrc文件输入`vi ~/.bashrc`来编辑，按< I >进入编辑模式，按< Ctrl + Shift + V >粘贴，再按< ESC >退出插入模式，最后输入`:wq`保存并退出：
 ```gtkrc
@@ -461,7 +461,7 @@ PROMPT_COMMAND=set_ascii_prompt
 这样，你的bash应该如图7：（只能算基本一致吧，有改动）
 
 > 图7
->![image](/images/configed_bash_of_Milk-V_Duo-S.png)
+>![image](/images/Milk-V_Duo-S/configed_bash_of_Milk-V_Duo-S.png)
 
 这个.bashrc的配色还等你琢磨，可以自己改！
 
