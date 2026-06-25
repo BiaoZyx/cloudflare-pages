@@ -1,45 +1,27 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
-  <channel>
-    <title>Posts on Zivon Xue&#39;s Personal Blog Site</title>
-    <link>http://localhost:1313/posts/</link>
-    <description>Recent content in Posts on Zivon Xue&#39;s Personal Blog Site</description>
-    <generator>Hugo</generator>
-    <language>zh-cn</language>
-    <lastBuildDate>Wed, 24 Jun 2026 21:41:21 +0800</lastBuildDate>
-    <atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>My First Post</title>
-      <link>http://localhost:1313/posts/my-first-post/</link>
-      <pubDate>Wed, 24 Jun 2026 21:41:21 +0800</pubDate>
-      <guid>http://localhost:1313/posts/my-first-post/</guid>
-      <description>&lt;h1 id=&#34;h1&#34;&gt;H1&lt;/h1&gt;
-&lt;h2 id=&#34;h2&#34;&gt;H2&lt;/h2&gt;
-&lt;h3 id=&#34;h3&#34;&gt;H3&lt;/h3&gt;
-&lt;h4 id=&#34;h4&#34;&gt;H4&lt;/h4&gt;
-&lt;h5 id=&#34;h5&#34;&gt;H5&lt;/h5&gt;
-&lt;h6 id=&#34;h6&#34;&gt;H6&lt;/h6&gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Posts on Zivon Xue's Personal Blog Site</title><link>https://localhost:1313/posts/</link><description>Recent content in Posts on Zivon Xue's Personal Blog Site</description><generator>Hugo</generator><language>zh-cn</language><lastBuildDate>Wed, 24 Jun 2026 21:41:21 +0800</lastBuildDate><atom:link href="https://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml"/><item><title>My First Post</title><link>https://localhost:1313/posts/my-first-post/</link><pubDate>Wed, 24 Jun 2026 21:41:21 +0800</pubDate><guid>https://localhost:1313/posts/my-first-post/</guid><description>&lt;h1 id="h1"&gt;H1&lt;/h1&gt;
+&lt;h2 id="h2"&gt;H2&lt;/h2&gt;
+&lt;h3 id="h3"&gt;H3&lt;/h3&gt;
+&lt;h4 id="h4"&gt;H4&lt;/h4&gt;
+&lt;h5 id="h5"&gt;H5&lt;/h5&gt;
+&lt;h6 id="h6"&gt;H6&lt;/h6&gt;
 &lt;table&gt;
-  &lt;thead&gt;
-      &lt;tr&gt;
-          &lt;th style=&#34;text-align: left&#34;&gt;a&lt;/th&gt;
-          &lt;th style=&#34;text-align: center&#34;&gt;b&lt;/th&gt;
-          &lt;th style=&#34;text-align: right&#34;&gt;c&lt;/th&gt;
-      &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-      &lt;tr&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;left&lt;/td&gt;
-          &lt;td style=&#34;text-align: center&#34;&gt;centre&lt;/td&gt;
-          &lt;td style=&#34;text-align: right&#34;&gt;right&lt;/td&gt;
-      &lt;/tr&gt;
-  &lt;/tbody&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th style="text-align: left"&gt;a&lt;/th&gt;
+&lt;th style="text-align: center"&gt;b&lt;/th&gt;
+&lt;th style="text-align: right"&gt;c&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;left&lt;/td&gt;
+&lt;td style="text-align: center"&gt;centre&lt;/td&gt;
+&lt;td style="text-align: right"&gt;right&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
 &lt;/table&gt;
 &lt;p&gt;&lt;code&gt;small code block&lt;/code&gt;&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;big code block
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;big code block
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;strong&gt;bold&lt;/strong&gt;&lt;br&gt;
 &lt;em&gt;italic&lt;/em&gt;&lt;br&gt;
-&lt;del&gt;deleted&lt;/del&gt;&lt;/p&gt;</description>
-    </item>
-  </channel>
-</rss>
+&lt;del&gt;deleted&lt;/del&gt;&lt;/p&gt;</description></item></channel></rss>

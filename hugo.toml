@@ -1,4 +1,4 @@
-baseURL = 'https://localhost:1313/'
+baseURL = 'https://biaozyx.pages.dev/'
 locale = 'zh-cn'
 title = "Zivon Xue's Personal Blog Site"
 theme = 'PaperMod'
