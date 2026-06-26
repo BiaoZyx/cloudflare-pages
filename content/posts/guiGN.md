@@ -1,9 +1,9 @@
 +++
 title = "guiGN: GUI猜数字游戏"
-date = 2025-03-30
+date = '2025-03-30T12:55:12+08:00'
 draft = false
-tags = ["Milk-V Duo S", "硬件", "嵌入式"]
-categories = ["硬件折腾"]
+tags = ["软件", "Python"]
+categories = ["软件开发"]
 author = "BiaoZyx"
 +++
 
