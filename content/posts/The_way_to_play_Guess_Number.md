@@ -5,6 +5,7 @@ draft = false
 tags = ["教程"]
 categories = ["杂谈"]
 author = "BiaoZyx"
+math = true
 +++
 
 # 公式
