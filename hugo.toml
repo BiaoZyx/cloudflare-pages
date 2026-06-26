@@ -43,7 +43,18 @@ theme = 'PaperMod'
   ShowToc = true
   # 显示文章分类
   ShowPostNavLinks = true
+  # 开启数学公式
+  math = true
 
 [params.homeInfoParams]
     Title = "👋Hi, there! "
     Content = "Welcome to my Campsite! "
+    
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.extensions]
+      [markup.goldmark.extensions.passthrough]
+        enable = true
+        [markup.goldmark.extensions.passthrough.delimiters]
+          block = [['\[', '\]'], ['$$', '$$']]
+          inline = [['\(', '\)']]
