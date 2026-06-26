@@ -2,7 +2,7 @@
 title = 'How to play Guess Number\n 猜数字教程'
 date = '2025-06-24T10:39:53+08:00'
 draft = false
-tags = []
+tags = ["教程"]
 categories = ["杂谈"]
 author = "BiaoZyx"
 +++
