@@ -1,5 +1,5 @@
 +++
-title = 'Configuring Zsh without Oh-My-Zsh\n无框架配置Zsh'
+title = 'Configuring Zsh without Oh-My-Zsh | 无框架配置Zsh'
 date = '2026-05-19T19:15:31+08:00'
 draft = false
 tags = ["Zsh", "Shell", "Configs"]

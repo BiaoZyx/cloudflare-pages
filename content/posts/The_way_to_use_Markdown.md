@@ -1,5 +1,5 @@
 +++
-title = 'How to use Markdown\n Markdown 编写指南'
+title = 'How to use Markdown | Markdown 编写指南'
 date = '2025-04-19T20:36:45+08:00'
 draft = false
 tags = ["教程"]

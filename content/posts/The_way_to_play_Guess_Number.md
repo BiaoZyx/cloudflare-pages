@@ -1,5 +1,5 @@
 +++
-title = 'How to play Guess Number\n 猜数字教程'
+title = 'How to play Guess Number | 猜数字教程'
 date = '2025-06-24T10:39:53+08:00'
 draft = false
 tags = ["教程"]

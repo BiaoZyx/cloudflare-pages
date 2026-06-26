@@ -1,5 +1,5 @@
 +++
-title = 'Configuring Bash\nBash美化'
+title = 'Configuring Bash | Bash美化'
 date = '2025-06-30T11:27:33+08:00'
 draft = false
 tags = ["Bash", "Shell", "Config"]
