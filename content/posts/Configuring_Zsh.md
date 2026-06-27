@@ -17,7 +17,7 @@ author = "BiaoZyx"
 curl https://biaozyx.pages.dev/scripts/setup_zsh.sh | bash
 ```
 > 致大陆用户：
-> 由于大部分镜像站不复存在，建议科学上网使用。也欢迎告诉我新的镜像站至[我的邮箱](BiaoZyx@outlook.com)！
+> 由于大部分镜像站不复存在，建议科学上网使用。也欢迎告诉我新的镜像站至[我的邮箱](mailto:BiaoZyx@outlook.com)！
 
 ## 1. 前置准备
 
