@@ -14,7 +14,7 @@ author = "BiaoZyx"
 ## 在线安装
 你可以通过以下脚本进行在线安装：
 ```bash
-curl https://biaozyx.pages.dev/scripts/setup_zsh.sh
+curl https://biaozyx.pages.dev/scripts/setup_zsh.sh | bash
 ```
 > 致大陆用户：
 > 由于大部分镜像站不复存在，建议科学上网使用。也欢迎告诉我新的镜像站至[我的邮箱](BiaoZyx@outlook.com)！
