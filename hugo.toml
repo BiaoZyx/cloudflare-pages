@@ -1,6 +1,6 @@
 # 站点基础设置
 baseURL = 'https://biaozyx.pages.dev/'
-locale = 'zh-CN'
+locale = 'zh-cn'
 title = "Zivon Xue's Campsite"
 theme = 'PaperMod'
 
