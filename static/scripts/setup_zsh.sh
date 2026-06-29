@@ -206,46 +206,48 @@ check_disk_space() {
 # 询问是否使用 kkgithub 镜像
 # ============================================================
 ask_mirror() {
-  if [[ "$NON_INTERACTIVE" == true ]]; then
-    USE_MIRROR=false
-    return
-  fi
-
-  if [[ "$QUIET_MODE" != true ]]; then
-    echo -e "\n${BLUE}[?] Use kkgithub.com mirror to speed up git clone?${NC}"
-    echo -e "   kkgithub.com is a GitHub mirror for users in China"
-    read -p "Use mirror? (y/N): " use_mirror
-  else
-    local use_mirror="n"
-  fi
-
-  if [[ "$use_mirror" =~ ^[Yy]$ ]]; then
-    log_info "Testing kkgithub.com mirror availability..."
-    if curl -s --connect-timeout 3 "https://kkgithub.com" >/dev/null 2>&1; then
-      USE_MIRROR=true
-      log_success "Mirror enabled"
-    else
-      USE_MIRROR=false
-      log_warning "Mirror not available, using direct GitHub"
+    if [[ "$NON_INTERACTIVE" == true ]]; then
+        USE_MIRROR=false
+        return
     fi
-  else
-    USE_MIRROR=false
+
     if [[ "$QUIET_MODE" != true ]]; then
-      echo -e "${YELLOW}[→] Using direct GitHub${NC}"
+        echo -e "\n${BLUE}[?] Use a GitHub mirror to speed up git clone?${NC}"
+        echo -e "  1) gitclone.com (recommended for China)"
+        echo -e "  2) kkgithub.com"
+        echo -e "  3) hub.fastgit.xyz"
+        echo -e "  n) No mirror"
+        read -p "Choose (1/2/3/n): " mirror_choice
+    else
+        mirror_choice="n"
     fi
-  fi
+
+    case "$mirror_choice" in
+        1)  USE_MIRROR=true
+            MIRROR_PREFIX="https://gitclone.com/github.com/"
+            log_success "Using gitclone.com mirror" ;;
+        2)  USE_MIRROR=true
+            MIRROR_PREFIX="https://kkgithub.com/"
+            log_success "Using kkgithub.com mirror" ;;
+        3)  USE_MIRROR=true
+            MIRROR_PREFIX="https://hub.fastgit.xyz/"
+            log_success "Using hub.fastgit.xyz mirror" ;;
+        *)  USE_MIRROR=false
+            log_info "Using direct GitHub" ;;
+    esac
 }
 
 # ============================================================
 # URL 镜像转换函数
 # ============================================================
 mirror_url() {
-  local original_url=$1
-  if [[ "$USE_MIRROR" == true ]]; then
-    echo "$original_url" | sed 's|https://github.com/|https://kkgithub.com/|'
-  else
-    echo "$original_url"
-  fi
+    local original_url=$1
+    if [[ "$USE_MIRROR" == true ]]; then
+        local path="${original_url#https://github.com/}"
+        echo "${MIRROR_PREFIX}${path}"
+    else
+        echo "$original_url"
+    fi
 }
 
 # ============================================================

@@ -2,7 +2,7 @@
 title = 'Configuring Zsh without Oh-My-Zsh | 无框架配置Zsh'
 date = '2026-05-19T19:15:31+08:00'
 draft = false
-tags = ["Zsh", "Shell", "Configs"]
+tags = ["Zsh", "Shell", "Config"]
 categories = ["终端配置"]
 author = "BiaoZyx"
 +++
@@ -14,7 +14,10 @@ author = "BiaoZyx"
 ## 在线安装
 你可以通过以下脚本进行在线安装：
 ```bash
-curl https://biaozyx.pages.dev/scripts/setup_zsh.sh | bash
+curl https://biaozyx.pages.dev/scripts/setup_zsh.sh | bash    # 适用于大部分发行版
+```
+```bash
+curl https://biaozyx.pages.dev/scripts/setup_zsh-alpine.sh | bash    # 为 Alpine Linux 定制
 ```
 > 致大陆用户：
 > 由于大部分镜像站不复存在，建议科学上网使用。也欢迎告诉我新的镜像站至[我的邮箱](mailto:BiaoZyx@outlook.com)！
