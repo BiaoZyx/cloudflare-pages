@@ -17,7 +17,7 @@ author = "BiaoZyx"
 curl https://biaozyx.pages.dev/scripts/setup_zsh.sh | bash    # 适用于大部分发行版
 ```
 ```bash
-curl https://biaozyx.pages.dev/scripts/setup_zsh-alpine.sh | bash    # 为 Alpine Linux 定制
+curl https://biaozyx.pages.dev/scripts/setup_zsh-alpine.sh | sh    # 为 Alpine Linux 定制
 ```
 > 致大陆用户：
 > 由于大部分镜像站不复存在，建议科学上网使用。也欢迎告诉我新的镜像站至[我的邮箱](mailto:BiaoZyx@outlook.com)！
