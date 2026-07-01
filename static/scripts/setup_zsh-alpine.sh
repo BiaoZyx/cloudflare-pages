@@ -120,6 +120,7 @@ bindkey '^U' backward-kill-line
 bindkey '^K' kill-line
 bindkey '^W' backward-kill-word
 bindkey '^[d' kill-word
+
 bindkey '^[[3~' delete-char
 bindkey '^[[3;5~' kill-word
 
