@@ -4,10 +4,7 @@ date = '2026-05-19T19:15:31+08:00'
 draft = false
 tags = ["Zsh", "Shell", "Config"]
 categories = ["终端配置"]
-author = "BiaoZyx"
 +++
-
-# Zsh 配置完整指南：从零打造高效终端
 
 本文档提供一套完整的 Zsh 配置方案，涵盖补全系统、历史搜索、语法高亮、自动建议及 `Powerlevel10k` 主题。所有步骤手动整合，不使用 `Oh My Zsh` 等框架，配置完全透明可控。
 
