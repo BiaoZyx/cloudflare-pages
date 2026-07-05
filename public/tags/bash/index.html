@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto" data-theme="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Bash | Zivon Xue&#39;s Campsite</title>
+<meta name="keywords" content="">
+<meta name="description" content="一个喜欢 Alpine Linux 和 KISS 哲学的系统探索者">
+<meta name="author" content="">
+<link rel="canonical" href="https://biaozyx.pages.dev/tags/bash/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.cd9298b33628769aa1bc1acebbbfd7aa11ce81dfe03484d479e1907760249a1d.css" integrity="sha256-zZKYszYodpqhvBrOu7/XqhHOgd/gNITUeeGQd2Akmh0=" rel="preload stylesheet" as="style">
+<link rel="icon" href="https://biaozyx.pages.dev/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://biaozyx.pages.dev/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://biaozyx.pages.dev/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://biaozyx.pages.dev/apple-touch-icon.png">
+<link rel="mask-icon" href="https://biaozyx.pages.dev/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" type="application/rss+xml" href="https://biaozyx.pages.dev/tags/bash/index.xml" title="rss">
+<link rel="alternate" hreflang="en" href="https://biaozyx.pages.dev/tags/bash/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+                color-scheme: dark;
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .toc {
+                background: var(--entry);
+            }
+        }
+
+    </style>
+</noscript>
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else if (localStorage.getItem("pref-theme") === "light") {
+       document.querySelector("html").dataset.theme = 'light';
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else {
+        document.querySelector("html").dataset.theme = 'light';
+    }
+
+</script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG+vnGctmUb0ZY0l8" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement(document.body, {
+            delimiters: [
+                {left: '$$', right: '$$', display: true},
+                {left: '$', right: '$', display: false},
+                {left: '\\(', right: '\\)', display: false},
+                {left: '\\[', right: '\\]', display: true}
+            ],
+            throwOnError : false
+        });
+    });
+</script>
+
+
+<meta property="og:url" content="https://biaozyx.pages.dev/tags/bash/">
+  <meta property="og:site_name" content="Zivon Xue&#39;s Campsite">
+  <meta property="og:title" content="Bash">
+  <meta property="og:description" content="一个喜欢 Alpine Linux 和 KISS 哲学的系统探索者">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="website">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Bash">
+  <meta name="twitter:description" content="一个喜欢 Alpine Linux 和 KISS 哲学的系统探索者">
+
+</head>
+<body class="list" id="top">
+    <header class="header">
+    <nav class="header-nav">
+        <div class="logo">
+            <a href="https://biaozyx.pages.dev/" accesskey="h" title="Zivon Xue&#39;s Campsite (Alt + H)">Zivon Xue&#39;s Campsite</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" class="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
+                    <svg class="moon" xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg class="sun" xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu" class="menu">
+            <li>
+                <a href="https://biaozyx.pages.dev/posts/" title="文章">
+                    <span>文章</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://biaozyx.pages.dev/tags/" title="标签">
+                    <span>标签</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://biaozyx.pages.dev/about/" title="关于">
+                    <span>关于</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main"> 
+<header class="page-header">
+  <h1>
+    Bash
+  </h1>
+</header>
+
+<article class="post-entry tag-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Configuring Bash | Bash美化
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>前言 最近在折腾Duo S觉得上面bash一点颜色都没有，忒难看，于是开始自己动手美化bash，最终得到这篇文章的.bashrc文件，还请大家过目！ 由于这不算一个项目，所以就不把老版本内容保留了。最新版代码就贴在博客，可以通过右侧导航栏快速移到那里！
+效果展示 附 效果展示截图 n份
+v3.0 路径折叠仿照fish，父目录为单字符缩写（隐藏目录为两个字符）。耗时变为复合型，将整条命令的时间记录（即上条提示符命令被执行到这个提示符出现的时间，精确度为1ms） v3.1 相较于v3.0，明显git功能更灵活，但也有些问题（如删除后没有反馈） 删除没有反馈是因为现在使用diff计数，不再使用本地缓存了，所以是正常现象！（但其实不联网也依旧能用） 此外，添加了分割线。
+代码展示-v3.1 重要消息 ble.sh 不建议搭配使用，建议搭配thefuck,因为ble.sh篡改$PROMPT_COMMAND，导致计时功能不稳定。已用&#43;=()确保不被覆盖，新增管道报错功能无法正常工作。已更改为更现代的powerline外观。
+#!/bin/bash # ~/.bashrc # Version : 3.1 # Update-time : 2026-5-6 # Author : BiaoZyx # Email : BiaoZyx@outlook.com ##################################### # Commit : Add a line to devide the prompts, and update the git mod. # 加载全局配置 if [ -f /etc/bashrc ]; then . /etc/bashrc fi # 用户环境变量 if ! [[ &#34;$PATH&#34; =~ &#34;$HOME/.local/bin:$HOME/bin:&#34; ]]; then PATH=&#34;$HOME/.local/bin:$HOME/bin:$PATH&#34; fi export PATH # Uncomment the following line if you don&#39;t like systemctl&#39;s auto-paging feature: # export SYSTEMD_PAGER= # User specific aliases and functions if [ -d ~/.bashrc.d ]; then for rc in ~/.bashrc.d/*; do if [ -f &#34;$rc&#34; ]; then . &#34;$rc&#34; fi done fi unset rc # 在交互shell启用bash自动补全，建议安装`bash-completion`并启用 if ! shopt -oq posix; then if [ -f /usr/share/bash-completion/bash_completion ]; then . /usr/share/bash-completion/bash_completion elif [ -f /etc/bash_completion ]; then . /etc/bash_completion fi fi ############################## 自定义 ############################## ## 变量 # 如果使用opkg，添加以下内容 #export PATH=$PATH:/opt/bin export PATH=~/.npm-global/bin:$PATH # ----- 备忘录 ----- if [ -f ~/文档/memo.xue ]; then # 自定义备忘录 - 示例 memo=$HOME/文档/memo.xue fi ## 别名 alias ls=&#34;ls --color -F&#34; # 自定义`ls`，可自行删减 alias l=&#34;ls -lah&#34; # 自定义`ls`，可自行删减 alias ll=&#34;ls -lh&#34; # 自定义`ls`，可自行删减 alias ip=&#39;ip --color=auto&#39; # `ip a`的彩色，很有必要 if [[ -z $memo ]]; then alias memo=&#34;echo 备忘录路径为空！请手动添加到~/.bashrc！&#34; else if command -v lolcat &amp;&gt;/dev/null; then alias memo=&#34;lolcat $memo&#34; else alias memo=&#34;cat $memo&#34; fi fi #################################################################### # ============ 现代 Powerline 风格提示符 ============ # 颜色定义 R=&#39;\[\033[0m\]&#39; # 重置 BL=&#39;\[\033[1;30m\]&#39; # 黑体 R1=&#39;\[\033[1;31m\]&#39; # 红色 G1=&#39;\[\033[1;32m\]&#39; # 绿色 Y1=&#39;\[\033[1;33m\]&#39; # 黄色 B1=&#39;\[\033[1;34m\]&#39; # 蓝色 M1=&#39;\[\033[1;35m\]&#39; # 紫色 C1=&#39;\[\033[1;36m\]&#39; # 青色 W1=&#39;\[\033[1;37m\]&#39; # 白色 # 背景色 BG_BLACK=&#39;\[\033[40m\]&#39; BG_RED=&#39;\[\033[41m\]&#39; BG_GREEN=&#39;\[\033[42m\]&#39; BG_YELLOW=&#39;\[\033[43m\]&#39; BG_BLUE=&#39;\[\033[44m\]&#39; BG_MAGENTA=&#39;\[\033[45m\]&#39; BG_CYAN=&#39;\[\033[46m\]&#39; BG_WHITE=&#39;\[\033[47m\]&#39; # 路径折叠 _collapse() { local pwd=&#34;$PWD&#34; local home=&#34;$HOME&#34; local size=${#home} [[ -z &#34;$pwd&#34; ]] &amp;&amp; return if [[ &#34;$pwd&#34; == &#34;/&#34; ]]; then echo &#34;/&#34; return elif [[ &#34;$pwd&#34; == &#34;$home&#34; ]]; then echo &#34;~&#34; return fi # 替换 $HOME 为 ~ if [[ &#34;$pwd&#34; == &#34;$home/&#34;* ]]; then pwd=&#34;~${pwd:$size}&#34; fi # 分割路径 local IFS=&#34;/&#34; local elements=($pwd) local length=${#elements[@]} local start=0 # 如果路径以 / 开头，跳过第一个空元素 if [[ -z &#34;${elements[0]}&#34; ]]; then start=1 fi for ((i = start; i &lt; length - 1; i&#43;&#43;)); do local elem=&#34;${elements[$i]}&#34; if [[ -n &#34;$elem&#34; ]]; then if [[ &#34;$elem&#34; == .* ]]; then # 隐藏文件夹（以 . 开头）显示前 2 个字符 elements[$i]=&#34;${elem:0:2}&#34; else # 普通文件夹显示第 1 个字符 elements[$i]=&#34;${elem:0:1}&#34; fi fi done # 重新组合路径 IFS=&#34;/&#34; echo &#34;${elements[*]}&#34; } # Git 分支&#43;状态 _git_info() { local b r=&#34;&#34; s line b=$(git branch --show-current 2&gt;/dev/null) || return # 一次命令获取所有信息 s=$(git status --porcelain=2 --branch 2&gt;/dev/null) # 解析分支信息 local ahead=0 behind=0 ab=&#34;$R&#34; local ab_line=$(echo &#34;$s&#34; | grep &#34;^# branch\.ab&#34;) if [[ -n &#34;$ab_line&#34; ]]; then ahead=$(echo &#34;$ab_line&#34; | cut -d&#39; &#39; -f3 | tr -d &#39;&#43;&#39;) behind=$(echo &#34;$ab_line&#34; | cut -d&#39; &#39; -f4 | tr -d &#39;-&#39;) fi # 统计文件 local staged=0 unstaged=0 untracked=0 conflicts=0 while IFS= read -r line; do [[ &#34;$line&#34; == &#34;# &#34;* ]] &amp;&amp; continue case &#34;$line&#34; in &#34;1 &#34;*) staged=$((staged &#43; 1)) ;; # 暂存区 &#34;2 &#34;*) unstaged=$((unstaged &#43; 1)) ;; # 工作区修改 &#34; D&#34;*) unstaged=$((unstaged &#43; 1)) ;; # 工作区删除 &#34; D&#34;????*) staged=$((staged &#43; 1)) ;; # 暂存区删除 &#34;u &#34;*) conflicts=$((conflicts &#43; 1));; # 冲突 &#34;? &#34;*) untracked=$((untracked &#43; 1));; # 未跟踪 esac done &lt;&lt;&lt; &#34;$(echo &#34;$s&#34; | grep -v &#39;^#&#39;)&#34; # 构建状态字符串 if (( conflicts &gt; 0 )); then r=&#34; ✦${conflicts}&#34; # 有冲突最优先 elif (( staged &#43; unstaged &#43; untracked == 0 )); then r=&#34; ○&#34; # 干净 else r=&#34; ●&#34; # 有修改 (( staged &gt; 0 )) &amp;&amp; r=&#34;$r &#43;${staged}&#34; (( unstaged &gt; 0 )) &amp;&amp; r=&#34;$r ~${unstaged}&#34; (( untracked &gt; 0 )) &amp;&amp; r=&#34;$r …${untracked}&#34; # 未跟踪文件 fi # 分支名 &#43; 状态 local branch_info=&#34; ${b}${r}&#34; # 远程同步状态 if (( ahead &gt; 0 )); then branch_info=&#34;$branch_info ↑${ahead}&#34; fi if (( behind &gt; 0 )); then branch_info=&#34;$branch_info ↓${behind}&#34; fi echo -n &#34;$branch_info &#34; } # 耗时格式化 _fmt_t() { local ms=$((($1 &#43; 500000) / 1000000)) if ((ms &lt; 1000)); then printf &#34;%dms&#34; $ms elif ((ms &lt; 60000)); then printf &#34;%d.%01ds&#34; $((ms / 1000)) $(((ms % 1000) / 100)) elif ((ms &lt; 3600000)); then printf &#34;%dm%02ds&#34; $((ms / 60000)) $(((ms % 60000) / 1000)) else printf &#34;%dh%02dm&#34; $((ms / 3600000)) $(((ms % 3600000) / 60000)) fi } # 计时 __ts=&#34;&#34; trap &#39;__ps=(&#34;${PIPESTATUS[@]}&#34;); [[ -z &#34;$__ts&#34; ]] &amp;&amp; __ts=$(date &#43;%s%N)&#39; DEBUG # 根用户检测 __is_root() { [[ $(id -u) -eq 0 ]] &amp;&amp; echo 1; } # ====== 核心：构建 Powerline 提示符 ====== _powerline_prompt() { local ec=$? local now=$(date &#43;%s%N) # 耗时 local t=&#34;&#34; if [[ -n &#34;$__ts&#34; ]]; then t=$(_fmt_t $((now - __ts))) __ts=&#34;&#34; fi # Git local git=&#34;$(_git_info)&#34; # 状态图标（支持管道状态） local st_icon=&#34;&#34; local st_bg=&#34;${BG_GREEN}&#34; local st_fg=&#34;${BL}&#34; local st_arr_fg=&#34;${G1}&#34; if ((ec != 0)); then # 检查管道状态 if [[ -n &#34;${__ps[*]}&#34; &amp;&amp; ${#__ps[@]} -gt 1 ]]; then local pipe_info=$( IFS=&#39;|&#39; echo &#34;${__ps[*]}&#34; ) st_icon=&#34; ✕${pipe_info}&#34; else st_icon=&#34; ✕${ec}&#34; fi st_bg=&#34;${BG_RED}&#34; st_fg=&#34;${W1}&#34; st_arr_fg=&#34;${R1}&#34; fi # === 拼装 Powerline 全箭头 === # 段1: 用户@主机 (青色底&#43;黑字) → 箭头进入蓝色 local s1=&#34;${BG_CYAN}${BL} \u@\h ${R}${C1}${BG_BLUE}&#34; # 段2: 路径 (蓝色底&#43;白字) local s2=&#34;${BG_BLUE}${W1} $(_collapse) ${R}&#34; # 段3: Git部分 / 直接跳到耗时 local s3=&#34;&#34; if [[ -n &#34;$git&#34; ]]; then # 有git：蓝色箭头进入黄色 → git文字 → 黄色箭头进入状态色 s2&#43;=&#34;${BG_BLACK}${B1}${BG_YELLOW}&#34; s3=&#34;${BG_YELLOW}${BL}${git}${R}${BG_BLACK}${Y1}${st_bg}&#34; else # 没git：蓝色箭头直接进入状态色 s3=&#34;${BG_BLACK}${B1}${st_bg}&#34; fi # 段4: 耗时&#43;状态图标 → 末端箭头 local s4=&#34;${st_bg}${st_fg}${st_icon} ${t} ${R}${st_arr_fg}&#34; __last_time=$now # 最终单行 #PS1=&#34;\[\n\]${s1}${s2}${s3}${s4} ${R}&#34; PS1=&#34;${R}\[\033[1;30m\]───${R}\n${s1}${s2}${s3}${s4} ${R}&#34; } PROMPT_COMMAND&#43;=(_powerline_prompt) # =========================== 欢迎界面 ============================== if [[ -e /usr/bin/figlet ]]; then figlet_lock_file=&#34;/tmp/figlet_lock_$$&#34; # 使用 $$ 作为文件名的一部分，确保每个进程都有自己的锁文件 # 检查锁文件是否存在 if [ ! -f &#34;$figlet_lock_file&#34; ]; then # 创建锁文件并执行 figlet touch &#34;$figlet_lock_file&#34; echo &#34; _ _ _ /\\_/\\ | | | (_) (o.o) | |_| | |_ &gt; ^ &lt; . | _ | ( ) / \\ . |_| |_|_|/ &#34; figlet &#34;$USER! &#34; fi fi trap &#39;rm -f &#34;$figlet_lock_file&#34;&#39; EXIT TERM # 用钩子，等退出删除锁文件 更新日志 - 重要，会发布已知BUG！ v1 这个是原本给Buildroot用的，详见Milk-V Duo S | 使用报告
+...</p>
+  </div>
+  <footer class="entry-footer">
+
+<span title='2025-06-30 11:27:33 +0800 CST'>June 30, 2025</span>&nbsp;·&nbsp;<span>5 min</span>&nbsp;·&nbsp;<span>BiaoZyx</span></footer>
+  <a class="entry-link" aria-label="post link to Configuring Bash | Bash美化" href="https://biaozyx.pages.dev/posts/configuring_bash/"></a>
+</article>
+    </main>
+    
+<footer class="footer">
+        <span>&copy; 2026 <a href="https://biaozyx.pages.dev/">Zivon Xue&#39;s Campsite</a></span> · 
+
+    
+    
+    <span>
+        Powered by
+        <a href="https://gohugo.io/?utm_source=papermod" rel="noopener" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" id="top-link" class="top-link hidden" aria-label="go to top" title="Go to Top (Alt + G)" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevrons-up">
+        <polyline points="17 11 12 6 7 11"></polyline>
+        <polyline points="17 18 12 13 7 18"></polyline>
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu');
+    if (menu) {
+        
+        const scrollPosition = localStorage.getItem("menu-scroll-position");
+        if (scrollPosition) {
+            menu.scrollLeft = parseInt(scrollPosition, 10);
+        }
+        
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var toplink = document.getElementById("top-link");
+    window.onscroll = function () {
+        const scrollThreshold = window.innerHeight;
+        if (document.body.scrollTop > scrollThreshold || document.documentElement.scrollTop > scrollThreshold) {
+            toplink.classList.remove("hidden");
+        } else {
+            toplink.classList.add("hidden");
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        const html = document.querySelector("html");
+        if (html.dataset.theme === "dark") {
+            html.dataset.theme = 'light';
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            html.dataset.theme = 'dark';
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
+</html>

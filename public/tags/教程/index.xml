@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>教程 on Zivon Xue&#39;s Campsite</title>
+    <link>https://biaozyx.pages.dev/tags/%E6%95%99%E7%A8%8B/</link>
+    <description>Recent content in 教程 on Zivon Xue&#39;s Campsite</description>
+    <generator>Hugo</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Tue, 24 Jun 2025 10:39:53 +0800</lastBuildDate>
+    <atom:link href="https://biaozyx.pages.dev/tags/%E6%95%99%E7%A8%8B/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>How to play Guess Number | 猜数字教程</title>
+      <link>https://biaozyx.pages.dev/posts/the_way_to_play_guess_number/</link>
+      <pubDate>Tue, 24 Jun 2025 10:39:53 +0800</pubDate>
+      <guid>https://biaozyx.pages.dev/posts/the_way_to_play_guess_number/</guid>
+      <description>&lt;h1 id=&#34;公式&#34;&gt;公式&lt;/h1&gt;
+&lt;p&gt;猜数字需要使用常见 &lt;strong&gt;“二分法”&lt;/strong&gt; 来进行计算估算，最终算得公式如下：
+&lt;/p&gt;
+$$
+中间数 = (最大数-最小数+1)÷2+最小数
+$$&lt;p&gt;
+根据这个公式，如果 &lt;strong&gt;计算无误&lt;/strong&gt; ，那么通常一局游戏最多只需7轮。
+以下是一场示例游戏！&lt;/p&gt;
+&lt;h1 id=&#34;示例游戏&#34;&gt;示例游戏&lt;/h1&gt;
+&lt;h2 id=&#34;第一轮&#34;&gt;第一轮&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;目前范围：1~100&lt;/li&gt;
+&lt;li&gt;根据公式计算中间数
+
+$$
+(100-1+1)÷2
+=100÷2
+=50
+$$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;输入50&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;提示：小了&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;第二轮&#34;&gt;第二轮&lt;/h2&gt;
+&lt;p&gt;第二轮先排除1~50，因为小了&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;目前范围：51~100&lt;/li&gt;
+&lt;li&gt;根据公式计算中间数
+
+$$
+(100-51+1)÷2+50
+=50÷2+50
+=25+50
+=75
+$$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;输入75&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;提示：大了&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;第三轮&#34;&gt;第三轮&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;排除：75~100&lt;/li&gt;
+&lt;li&gt;范围：51~74&lt;/li&gt;
+&lt;li&gt;根据公式计算：
+
+$$
+(74-51+1)÷2+51
+=(74-50)÷2+51
+=24÷2+51
+=12+51
+=63
+$$&lt;/li&gt;
+&lt;/ol&gt;
+&lt;blockquote&gt;
+&lt;p&gt;输入63&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;提示：小了&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;第四轮&#34;&gt;第四轮&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;排除：1~63&lt;/li&gt;
+&lt;li&gt;范围：64~74&lt;/li&gt;
+&lt;li&gt;根据公式计算：
+
+$$
+(74-63+1)÷2+64
+=(11+1)÷2+64
+=12÷2+64
+=6+64
+=70
+$$&lt;/li&gt;
+&lt;/ol&gt;
+&lt;blockquote&gt;
+&lt;p&gt;输入70&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;提示：小了&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;第五轮&#34;&gt;第五轮&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;排除：1~70&lt;/li&gt;
+&lt;li&gt;范围：71~74&lt;/li&gt;
+&lt;li&gt;根据公式计算：
+
+$$
+(74-71+1)÷2+70
+=(3+1)÷2+70
+=4÷2+70
+=2+70
+=72
+$$&lt;/li&gt;
+&lt;/ol&gt;
+&lt;blockquote&gt;
+&lt;p&gt;输入72&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>How to use Markdown | Markdown 编写指南</title>
+      <link>https://biaozyx.pages.dev/posts/the_way_to_use_markdown/</link>
+      <pubDate>Sat, 19 Apr 2025 20:36:45 +0800</pubDate>
+      <guid>https://biaozyx.pages.dev/posts/the_way_to_use_markdown/</guid>
+      <description>&lt;h1 id=&#34;markdown-完全指南&#34;&gt;Markdown 完全指南&lt;/h1&gt;
+&lt;p&gt;&lt;img alt=&#34;Markdown图标&#34; loading=&#34;lazy&#34; src=&#34;https://markdown-here.com/img/icon256.png&#34;&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;基础语法规范&#34;&gt;基础语法规范&lt;/h2&gt;
+&lt;h3 id=&#34;标题层级演示&#34;&gt;标题层级演示&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-markdown&#34; data-lang=&#34;markdown&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;# H1主标题
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;## H2副标题
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;### H3节标题
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#### H4子标题
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;##### H5特殊注释标题
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;###### H6超小标题（部分工具会忽略渲染）
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;blockquote&gt;
+&lt;p&gt;我还整理了一张表格，如下：&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;Markdown 语法&lt;/th&gt;
+          &lt;th&gt;名称&lt;/th&gt;
+          &lt;th&gt;HTML 标签&lt;/th&gt;
+          &lt;th&gt;典型用途&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;code&gt;#&lt;/code&gt;&lt;/td&gt;
+          &lt;td&gt;一级标题&lt;/td&gt;
+          &lt;td&gt;&lt;code&gt;&amp;lt;h1&amp;gt;&lt;/code&gt;&lt;/td&gt;
+          &lt;td&gt;文档主标题（通常唯一）&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;code&gt;##&lt;/code&gt;&lt;/td&gt;
+          &lt;td&gt;二级标题&lt;/td&gt;
+          &lt;td&gt;&lt;code&gt;&amp;lt;h2&amp;gt;&lt;/code&gt;&lt;/td&gt;
+          &lt;td&gt;章节标题&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;code&gt;###&lt;/code&gt;&lt;/td&gt;
+          &lt;td&gt;三级标题&lt;/td&gt;
+          &lt;td&gt;&lt;code&gt;&amp;lt;h3&amp;gt;&lt;/code&gt;&lt;/td&gt;
+          &lt;td&gt;子章节标题&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;code&gt;####&lt;/code&gt;&lt;/td&gt;
+          &lt;td&gt;四级标题&lt;/td&gt;
+          &lt;td&gt;&lt;code&gt;&amp;lt;h4&amp;gt;&lt;/code&gt;&lt;/td&gt;
+          &lt;td&gt;子段落标题&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;code&gt;#####&lt;/code&gt;&lt;/td&gt;
+          &lt;td&gt;五级标题&lt;/td&gt;
+          &lt;td&gt;&lt;code&gt;&amp;lt;h5&amp;gt;&lt;/code&gt;&lt;/td&gt;
+          &lt;td&gt;特殊注释标题&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;code&gt;######&lt;/code&gt;&lt;/td&gt;
+          &lt;td&gt;六级标题&lt;/td&gt;
+          &lt;td&gt;&lt;code&gt;&amp;lt;h6&amp;gt;&lt;/code&gt;&lt;/td&gt;
+          &lt;td&gt;极小文字标题&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h5 id=&#34;效果展示&#34;&gt;效果展示：&lt;/h5&gt;
+&lt;h1 id=&#34;h1主标题&#34;&gt;H1主标题&lt;/h1&gt;
+&lt;h2 id=&#34;h2副标题&#34;&gt;H2副标题&lt;/h2&gt;
+&lt;h3 id=&#34;h3节标题&#34;&gt;H3节标题&lt;/h3&gt;
+&lt;h4 id=&#34;h4子标题&#34;&gt;H4子标题&lt;/h4&gt;
+&lt;h5 id=&#34;h5特殊注释标题&#34;&gt;H5特殊注释标题&lt;/h5&gt;
+&lt;h6 id=&#34;h6超小标题部分工具会忽略渲染&#34;&gt;H6超小标题（部分工具会忽略渲染）&lt;/h6&gt;
+&lt;p&gt;Tips：不同博客主题的标题可能字体会不一样（渲染不同）&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id=&#34;文本样式模板&#34;&gt;文本样式模板&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-markdown&#34; data-lang=&#34;markdown&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;**加粗文字**  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;font-style:italic&#34;&gt;*斜体文字*&lt;/span&gt;  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;~~删除线文字~~&lt;/span&gt;  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;`行内代码`&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h5 id=&#34;效果展示-1&#34;&gt;效果展示：&lt;/h5&gt;
+&lt;p&gt;&lt;strong&gt;加粗文字&lt;/strong&gt;&lt;br&gt;
+&lt;em&gt;斜体文字&lt;/em&gt;&lt;br&gt;
+&lt;del&gt;删除线文字&lt;/del&gt;&lt;br&gt;
+&lt;code&gt;行内代码&lt;/code&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;高级语法应用&#34;&gt;高级语法应用&lt;/h2&gt;
+&lt;h3 id=&#34;代码块&#34;&gt;代码块&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-markdown&#34; data-lang=&#34;markdown&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;```文件类型
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;代码内容
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;```&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h5 id=&#34;示例代码&#34;&gt;示例代码：&lt;/h5&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-markdown&#34; data-lang=&#34;markdown&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;```python
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;print(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Hello, world!&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;```&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h5 id=&#34;展示效果&#34;&gt;展示效果：&lt;/h5&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;print(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Hello, world!&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;数据表格示例&#34;&gt;数据表格示例&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-markdown&#34; data-lang=&#34;markdown&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;| 设备类型   | 市场价格  | 库存量 |
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;|-----------|:---------:|-------:|
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;| 智能手机  | ¥2999     | 120    |
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;| 平板电脑  | ¥4599     | 75     |
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h5 id=&#34;效果展示-2&#34;&gt;效果展示：&lt;/h5&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;设备类型&lt;/th&gt;
+          &lt;th style=&#34;text-align: center&#34;&gt;市场价格&lt;/th&gt;
+          &lt;th style=&#34;text-align: right&#34;&gt;库存量&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;智能手机&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;¥2999&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;120&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;平板电脑&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;¥4599&lt;/td&gt;
+          &lt;td style=&#34;text-align: right&#34;&gt;75&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;文档结构规范&#34;&gt;文档结构规范&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-markdown&#34; data-lang=&#34;markdown&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;---  &amp;lt;!-- 分割线语法 --&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;&amp;gt; &lt;/span&gt;&lt;span style=&#34;font-style:italic&#34;&gt;注释说明块
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;[&lt;span style=&#34;color:#f92672&#34;&gt;通用链接&lt;/span&gt;](&lt;span style=&#34;color:#a6e22e&#34;&gt;https://example.com&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;![&lt;span style=&#34;color:#f92672&#34;&gt;图片占位符&lt;/span&gt;](&lt;span style=&#34;color:#a6e22e&#34;&gt;https://via.placeholder.com/200x100&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;hr&gt;
+&lt;p&gt;&lt;strong&gt;操作提示&lt;/strong&gt;：&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>
