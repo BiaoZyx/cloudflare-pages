@@ -253,18 +253,18 @@ ask_mirror() {
         1)  USE_MIRROR=true
             MIRROR_PREFIX="https://gh-proxy.com/github.com/"
             log_success "Using gh-proxy.com mirror"
-			;;
+			      ;;
         2)  USE_MIRROR=true
             MIRROR_PREFIX="https://kkgithub.com/"
             log_success "Using kkgithub.com mirror"
-			;;
+			      ;;
         3)  USE_MIRROR=true
             MIRROR_PREFIX="https://hub.fastgit.xyz/"
             log_success "Using hub.fastgit.xyz mirror"
-			;;
+			      ;;
         *)  USE_MIRROR=false
             log_info "Using direct GitHub"
-			;;
+			      ;;
     esac
 }
 
@@ -696,11 +696,18 @@ install_components() {
 
   if [[ ! -f ~/.zsh/completions/_git ]]; then
     log_info "Downloading Git completion script..."
-    if curl -sL --connect-timeout 10 -o ~/.zsh/completions/_git \
-      https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.zsh; then
-      log_success "Git completion script downloaded"
+    if [[ "$USE_MIRROR" = true ]]; then
+      if curl -sL --connect-timeout 10 -o ~/.zsh/completions/_git https://gh-proxy.com/https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.zsh; then
+        log_success "Git completion script downloaded"
+      else 
+        log_warning "Git completion script download failed"
+      fi
     else
-      log_warning "Git completion script download failed"
+      if curl -sL --connect-timeout 10 -o ~/.zsh/completions/_git https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.zsh; then
+        log_success "Git completion script downloaded"
+      else
+        log_warning "Git completion script download failed"
+      fi
     fi
   fi
 
