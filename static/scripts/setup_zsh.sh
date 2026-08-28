@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
 # ============================================================
-# Zsh 交互式配置脚本 (Version 2.3)
+# Zsh 交互式配置脚本 (Version 2.4)
 # ============================================================
 # 功能说明：
-#   1. 自动检测 Linux 发行版（Debian/Ubuntu/Arch/Fedora/Void）和 macOS
+#   1. 自动检测 Linux 发行版（Debian/Ubuntu/Arch/Fedora/Void/OpenWRT/Alpine 和 macOS）
 #   2. 交互式选择安装组件（基础配置、语法高亮、自动建议、历史搜索、Powerlevel10k）
 #   3. 支持非交互模式（-y）和静默模式（-q）
 #   4. 支持卸载功能（uninstall），卸载前自动备份
@@ -30,14 +30,15 @@ NC='\033[0m'
 # ============================================================
 # 运行时配置（会被命令行参数修改）
 # ============================================================
-USE_MIRROR=false                                         # 是否使用 kkgithub.com 镜像加速 git clone
-NON_INTERACTIVE=false                                    # 非交互模式（-y）：跳过所有用户询问，采用默认值
-QUIET_MODE=false                                         # 静默模式（-q）：不输出到终端，只写日志
-PKG_MANAGER=""                                           # 包管理器名称：apt/pacman/dnf/xbps/brew
-PKG_UPDATE=""                                            # 更新包数据库的命令
-PKG_INSTALL=""                                           # 安装软件包的命令
-DISTRO=""                                                # 发行版名称（用于显示）
-LOG_FILE="$HOME/.zsh_install_$(date +%Y%m%d_%H%M%S).log" # 日志文件，按时间戳命名
+VERSION=2.4
+USE_MIRROR=false                                          # 是否使用 kkgithub.com 镜像加速 git clone
+NON_INTERACTIVE=false                                     # 非交互模式（-y）：跳过所有用户询问，采用默认值
+QUIET_MODE=false                                          # 静默模式（-q）：不输出到终端，只写日志
+PKG_MANAGER=""                                            # 包管理器名称：apt/pacman/dnf/xbps/brew
+PKG_UPDATE=""                                             # 更新包数据库的命令
+PKG_INSTALL=""                                            # 安装软件包的命令
+DISTRO=""                                                 # 发行版名称（用于显示）
+LOG_FILE="$HOME/.zsh_install_$(date +%Y%m%d_%H%M%S).log"  # 日志文件，按时间戳命名
 
 # ============================================================
 # 错误处理函数
@@ -54,7 +55,8 @@ Usage: $0 [options]
 Options:
   -y, --yes       Non-interactive mode (install all components)
   -q, --quiet     Quiet mode (no terminal output, only log file)
-  uninstall       Remove all Zsh configurations and plugins
+  -r, --remove    Remove all Zsh configurations and plugins
+  -v, --version   Show the version of the script
   -h, --help      Show this help message
 
 Examples:
@@ -68,28 +70,28 @@ EOF
 # ============================================================
 # 日志函数（静默模式下只写文件，不输出到终端）
 # ============================================================
-log_info() {
+log_info() {    # 普通操作
   echo -e "${BLUE}[*] $1${NC}" >>"$LOG_FILE"
   if [[ "$QUIET_MODE" != true ]]; then
     echo -e "${BLUE}[*] $1${NC}"
   fi
 }
 
-log_success() {
+log_success() { # 操作完成
   echo -e "${GREEN}[✓] $1${NC}" >>"$LOG_FILE"
   if [[ "$QUIET_MODE" != true ]]; then
     echo -e "${GREEN}[✓] $1${NC}"
   fi
 }
 
-log_warning() {
+log_warning() { # 警告
   echo -e "${YELLOW}[!] $1${NC}" >>"$LOG_FILE"
   if [[ "$QUIET_MODE" != true ]]; then
     echo -e "${YELLOW}[!] $1${NC}"
   fi
 }
 
-log_error() {
+log_error() {   # 操作错误
   echo -e "${RED}[✗] $1${NC}" >>"$LOG_FILE"
   if [[ "$QUIET_MODE" != true ]]; then
     echo -e "${RED}[✗] $1${NC}"
@@ -102,15 +104,16 @@ log_error() {
 detect_distro() {
   log_info "Detecting system distribution..."
 
-
   if [[ "$OSTYPE" == "linux-gnu"* ]]; then
-    echo "You're using GNU/Linux now. "
+    #echo "You're using Linux with GLibC Library now. "
     if command -v doas &>/dev/null; then
       alias sudo=doas
-    if command -v sudo &>/dev/null; then
+    elif command -v sudo &>/dev/null; then
       :
     else
       echo "There isn't a sudo or a doas in your system! "
+	    echo "Please run this script again until doas/sudo is installed in your system! "
+	    exit 2
     fi
     if command -v apt &>/dev/null; then
       PKG_MANAGER="apt"
@@ -131,30 +134,43 @@ detect_distro() {
       PKG_MANAGER="xbps"
       PKG_UPDATE="sudo xbps-install -S"
       PKG_INSTALL="sudo xbps-install -y"
-      DISTRO="Void"
+      DISTRO="Void-GLibC"
     elif command -v opkg &>/dev/null; then
       PKG_MANAGER="opkg"
       PKG_UPDATE="sudo opkg update"
       PKG_INSTALL="sudo opkg install"
-      DISTRO="OpenWRT"
-    elif command -v apk &>/dev/null; then
-      PKG_MANAGER="apk"
-      PKG_UPDATE="sudo apk update"
-      PKG_INSTALL="sudo apk add"
-      DISTRO="Alpine"
+      DISTRO="OpenWRT-GLibC"
     else
       log_error "No supported package manager found"
       exit 1
     fi
+  elif [[ "$OSTYPE" == "linux-musl"* ]]; then
+    #echo "You are using Linux with Musl C Library now. "
+    if command -v apk &>/dev/null; then
+      PKG_MANAGER="apk"
+      PKG_UPDATE="sudo apk update"
+      PKG_INSTALL="sudo apk add"
+      DISTRO="Alpine"
+    elif command -v opkg &>/dev/null; then
+      PKG_MANAGER="opkg"
+      PKG_UPDATE="sudo opkg update"
+      PKG_INSTALL="sudo opkg install"
+      DISTRO="OpenWRT-Musl"
+    elif command -v xbps-install &>/dev/null; then
+      PKG_MANAGER="xbps"
+      PKG_UPDATE="sudo xbps-install -S"
+      PKG_INSTALL="sudo xbps-install -y"
+      DISTRO="Void-Musl"
+    fi
   elif [[ "$OSTYPE" == "darwin"* ]]; then
-    echo "You're using macOS now. "
+    #echo "You're using macOS now. "
     if command -v brew &>/dev/null; then
       PKG_MANAGER="brew"
       PKG_UPDATE="brew update"
       PKG_INSTALL="brew install"
       DISTRO="macOS"
     else
-      log_error "Homebrew is required. Please install it first: https://brew.sh"
+      log_error "Homebrew is required. Please install it first: https://brew.sh/"
       exit 1
     fi
   else
@@ -180,29 +196,20 @@ install_dependencies() {
   fi
 
   case "$DISTRO" in
-  "Debian/Ubuntu")
+  *)
     $PKG_INSTALL zsh git curl wget
     ;;
   "Arch")
     $PKG_INSTALL zsh git curl
     ;;
-  "Fedora")
-    $PKG_INSTALL zsh git curl wget
-    ;;
-  "Void")
-    $PKG_INSTALL zsh git curl wget
-    ;;
-  "macOS")
-    $PKG_INSTALL zsh git curl wget
-    ;;
   esac
 
   if ! command -v zsh &>/dev/null; then
-    log_error "zsh installation failed or not found"
+    log_error "Zsh installation failed or not found. "
     exit 1
   fi
 
-  log_success "Dependencies installed"
+  log_success "Done. "
 }
 
 # ============================================================
@@ -223,7 +230,7 @@ check_disk_space() {
 }
 
 # ============================================================
-# 询问是否使用 kkgithub 镜像
+# 询问是否使用 GitHub 镜像
 # ============================================================
 ask_mirror() {
     if [[ "$NON_INTERACTIVE" == true ]]; then
@@ -245,15 +252,19 @@ ask_mirror() {
     case "$mirror_choice" in
         1)  USE_MIRROR=true
             MIRROR_PREFIX="https://gh-proxy.com/github.com/"
-            log_success "Using gh-proxy.com mirror" ;;
+            log_success "Using gh-proxy.com mirror"
+			;;
         2)  USE_MIRROR=true
             MIRROR_PREFIX="https://kkgithub.com/"
-            log_success "Using kkgithub.com mirror" ;;
+            log_success "Using kkgithub.com mirror"
+			;;
         3)  USE_MIRROR=true
             MIRROR_PREFIX="https://hub.fastgit.xyz/"
-            log_success "Using hub.fastgit.xyz mirror" ;;
+            log_success "Using hub.fastgit.xyz mirror"
+			;;
         *)  USE_MIRROR=false
-            log_info "Using direct GitHub" ;;
+            log_info "Using direct GitHub"
+			;;
     esac
 }
 
@@ -309,7 +320,7 @@ clone_plugin() {
 }
 
 # ============================================================
-# 备份现有 .zshrc
+# 备份现有 ~/.zshrc
 # ============================================================
 backup_zshrc() {
   local old_backups=$(ls -t ~/.zshrc.backup.* 2>/dev/null | tail -n +6)
@@ -326,7 +337,7 @@ backup_zshrc() {
 }
 
 # ============================================================
-# 生成 .zshrc 配置文件
+# 生成 ~/.zshrc 配置文件
 # ============================================================
 generate_zshrc() {
   local enable_syntax=$1
@@ -336,7 +347,7 @@ generate_zshrc() {
 
   log_info "Generating ~/.zshrc..."
 
-  cat >~/.zshrc <<EOF
+  cat > ~/.zshrc << 'EOF'
 # ============================================================
 # Zsh Configuration File
 # Generated: $(date '+%Y-%m-%d %H:%M:%S')
@@ -398,11 +409,11 @@ bindkey '^[^[[C' forward-word
 if command -v eza &> /dev/null; then
     export EZA_ICONS_AUTO=1
     alias ls='eza'
-    alias ll='eza -l'
-    alias la='eza -A'
-    alias l='eza -lA'
+    alias ll='ls -l'
+    alias la='ls -A'
+    alias l='ls -lA'
 else
-    alias ls='ls --color=auto'
+    alias ls='ls --color=auto || ls --color || ls -G'
     alias ll='ls -l'
     alias la='ls -A'
     alias l='ls -lAh'
@@ -414,7 +425,7 @@ alias .....='cd ../../../..'
 alias ......='cd ../../../../..'
 alias cls='clear'
 alias grep='grep --color=auto'
-alias ip='ip --color=auto' 
+alias ip='ip --color=auto'
 
 # ------------------------------------------------------------
 # Completion System
@@ -429,7 +440,7 @@ zstyle ':completion:*' completer _expand _complete _ignored
 EOF
 
   if [[ "$enable_syntax" == "yes" ]]; then
-    cat >>~/.zshrc <<'EOF'
+    cat >> ~/.zshrc << 'EOF'
 # ------------------------------------------------------------
 # Syntax Highlighting (MUST BE LAST)
 # ------------------------------------------------------------
@@ -439,7 +450,7 @@ EOF
   fi
 
   if [[ "$enable_autosuggest" == "yes" ]]; then
-    cat >>~/.zshrc <<'EOF'
+    cat >> ~/.zshrc << 'EOF'
 # ------------------------------------------------------------
 # Autosuggestions
 # ------------------------------------------------------------
@@ -451,7 +462,7 @@ EOF
   fi
 
   if [[ "$enable_history" == "yes" ]]; then
-    cat >>~/.zshrc <<'EOF'
+    cat >> ~/.zshrc << 'EOF'
 # ------------------------------------------------------------
 # History Substring Search
 # ------------------------------------------------------------
@@ -475,7 +486,7 @@ EOF
   fi
 
   if [[ "$enable_p10k" == "yes" ]]; then
-    cat >>~/.zshrc <<'EOF'
+    cat >> ~/.zshrc << 'EOF'
 # ------------------------------------------------------------
 # Powerlevel10k Theme
 # ------------------------------------------------------------
@@ -726,7 +737,8 @@ install_components() {
   print_summary
 
   if [[ "$QUIET_MODE" != true ]]; then
-    echo -e "\n${GREEN}========================================${NC}"
+    echo -e ""
+    echo -e "${GREEN}========================================${NC}"
     echo -e "${GREEN}Installation Complete!${NC}"
     echo -e "${GREEN}========================================${NC}"
     echo -e "Run the following to apply changes:"
@@ -735,14 +747,16 @@ install_components() {
   fi
 
   if [[ "$enable_p10k" == "yes" ]] && [[ "$QUIET_MODE" != true ]]; then
-    echo -e "\n${YELLOW}[!] Powerlevel10k will run its configuration wizard on first Zsh startup${NC}"
+    echo -e ""
+    echo -e "${YELLOW}[!] Powerlevel10k will run its configuration wizard on first Zsh startup${NC}"
     echo -e "${YELLOW}    You can also run: p10k configure${NC}"
   fi
 
   if [[ "$DISTRO" != "macOS" ]] && [[ "$NON_INTERACTIVE" == false ]] && [[ "$QUIET_MODE" != true ]]; then
     local current_shell=$(basename "$SHELL")
     if [[ "$current_shell" != "zsh" ]]; then
-      echo -e "\n${BLUE}[?] Current default shell is $current_shell. Change to Zsh?${NC}"
+      echo -e ""
+      echo -e "${BLUE}[?] Current default shell is $current_shell. Change to Zsh?${NC}"
       read -p "Change to Zsh? (y/N): " change_shell
       if [[ "$change_shell" =~ ^[Yy]$ ]]; then
         if chsh -s "$(command -v zsh)"; then
@@ -753,9 +767,10 @@ install_components() {
       fi
     fi
   elif [[ "$DISTRO" == "macOS" ]] && [[ "$NON_INTERACTIVE" == false ]] && [[ "$QUIET_MODE" != true ]]; then
-    echo -e "\n${YELLOW}[!] To change default shell on macOS:${NC}"
+    echo -e ""
+    echo -e "${YELLOW}[!] To change default shell on macOS:${NC}"
     echo -e "    ${YELLOW}chsh -s /bin/zsh${NC}"
-    echo -e "    (Note: sudo is not needed for chsh on macOS)"
+    echo -e "    (Note: sudo/doas is not needed for chsh on macOS)"
   fi
 }
 
@@ -835,11 +850,11 @@ uninstall() {
       log_info "Backup saved to: $backup_dir"
     fi
 
-    rm -rf ~/.zshrc ~/.zsh ~/powerlevel10k ~/.p10k.zsh
+    rm -rf ~/.zshrc ~/.zsh/ ~/powerlevel10k/ ~/.p10k.zsh
     log_success "Configuration removed"
 
     if [[ "$QUIET_MODE" != true ]]; then
-      echo -e "${YELLOW}[!] To restore default shell, run: chsh -s /bin/bash${NC}"
+      echo -e "${YELLOW}[!] To restore default shell, run: chsh -s /bin/bash, or you'll not be able to login your account! ${NC}"
     fi
   else
     if [[ "$QUIET_MODE" != true ]]; then
@@ -862,8 +877,12 @@ parse_args() {
       QUIET_MODE=true
       NON_INTERACTIVE=true
       ;;
-    uninstall)
+    -r | --remove)
       uninstall
+      ;;
+    -v | --version)
+      echo "QuickZsh - version $VERSION"
+      exit 0
       ;;
     -h | --help)
       show_help
@@ -882,12 +901,13 @@ parse_args() {
 # 清理函数（退出时执行）
 # ============================================================
 cleanup() {
-  log_info "Script finished"
-  if [[ "$QUIET_MODE" != true ]]; then
-    echo -e "${BLUE}[*] Full log saved to: $LOG_FILE${NC}"
+  if [[ $arg != -v ]] && [[ $arg != --version ]] && [[ $arg != -h ]] && [[ $arg != --help ]]; then
+    log_info "Script finished"
+    if [[ "$QUIET_MODE" != true ]]; then
+      echo -e "${BLUE}[*] Full log saved to: $LOG_FILE${NC}"
+    fi
   fi
 }
-
 trap cleanup EXIT
 
 # ============================================================
