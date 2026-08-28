@@ -1,7 +1,6 @@
 #!/usr/bin/env sh
 # ============================================================
 # Alpine Linux Zsh 安装脚本
-# 使用 apk 安装所有插件，无需克隆 GitHub
 # ============================================================
 
 set -e
@@ -39,21 +38,30 @@ log_error() {
 # ============================================================
 # 检查运行用户
 # ============================================================
-if [ "$(id -u)" -eq 0 ]; then
-    log_error "请勿以 root 直接运行，使用普通用户 + doas"
-    exit 1
+#if [ "$(id -u)" -eq 0 ]; then
+#    log_error "Please don't run this script as a Super User! Please run it with doas or sudo. "
+#    exit 1
+#fi
+
+# ============================================================
+# 定义提权工具
+# ============================================================
+if command -v /usr/bin/doas &>/dev/null; then
+    :
+elif command -v /usr/bin/sudo &>/dev/null; then
+    alias doas=sudo
 fi
 
 # ============================================================
 # 1. 安装 shadow（提供 chsh）
 # ============================================================
-log_info "安装 shadow（chsh）..."
+log_info "Installing shadow (to use chsh)..."
 doas apk add shadow 2>&1 | tee -a "$LOG_FILE"
 
 # ============================================================
 # 2. 安装 Zsh 和插件
 # ============================================================
-log_info "安装 Zsh 和插件..."
+log_info "Installing zsh with its plugins..."
 doas apk add \
     zsh \
     zsh-autosuggestions \
@@ -66,12 +74,12 @@ doas apk add \
 # ============================================================
 # 3. 验证安装
 # ============================================================
-log_info "验证安装..."
+log_info "Verity the installation..."
 if ! command -v zsh >/dev/null 2>&1; then
-    log_error "Zsh 安装失败"
+    log_error "Failed to install Zsh..."
     exit 1
 fi
-log_success "Zsh 安装成功"
+log_success "Installed Zsh successful! "
 
 # ============================================================
 # 4. 备份现有 .zshrc
@@ -79,18 +87,17 @@ log_success "Zsh 安装成功"
 if [ -f ~/.zshrc ]; then
     BACKUP="$HOME/.zshrc.backup.$(date +%Y%m%d_%H%M%S)"
     cp ~/.zshrc "$BACKUP"
-    log_info "已备份原 .zshrc 到 $BACKUP"
+    log_info "Copied origin ~/.zshrc to $BACKUP"
 fi
 
 # ============================================================
 # 5. 生成完整的 .zshrc
 # ============================================================
-log_info "生成 ~/.zshrc..."
+log_info "Installing ~/.zshrc..."
 
 cat > ~/.zshrc << 'EOF'
 # ============================================================
-# Zsh Configuration for Alpine Linux
-# 完整版，包含所有快捷键和别名
+# Zsh Configuration for Alpine Linux (Full Version)
 # ============================================================
 
 # ------------------------------------------------------------
@@ -137,25 +144,29 @@ bindkey '^[[1;5C' forward-word
 bindkey '^[^[[C' forward-word
 
 # ------------------------------------------------------------
-# Aliases (eza 优先)
+# Aliases
 # ------------------------------------------------------------
 if command -v eza &> /dev/null; then
     export EZA_ICONS_AUTO=1
     alias ls='eza'
     alias ll='eza -l'
     alias la='eza -A'
-    alias l='eza -lah'
+    alias l='eza -lA'
 else
     alias ls='ls --color=auto'
     alias ll='ls -l'
     alias la='ls -A'
-    alias l='ls -lah'
+    alias l='ls -lAh'
 fi
 alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
+alias .....='cd ../../../..'
+alias ......='cd ../../../../..'
+alias cls=clear
 alias grep='grep --color=auto'
 alias ip='ip --color=auto'
+alias fastfetch='fastfetch -l Alpine2'
 
 # ------------------------------------------------------------
 # Completion
@@ -199,43 +210,35 @@ if [ -f /usr/share/zsh/plugins/zsh-history-substring-search/zsh-history-substrin
 
     bindkey '^[[1;2A' up-history
     bindkey '^[[1;2B' down-history
+    bindkey '^[[5~' up-history
+    bindkey '^[[6~' down-history
 fi
 
 # ------------------------------------------------------------
-# Powerlevel10k Theme (Alpine apk 路径)
+# Powerlevel10k Theme
 # ------------------------------------------------------------
 if [ -f /usr/share/zsh/plugins/powerlevel10k/powerlevel10k.zsh-theme ]; then
     source /usr/share/zsh/plugins/powerlevel10k/powerlevel10k.zsh-theme
     [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 fi
-
-# ------------------------------------------------------------
-# 颜色重置钩子（解决补全历史后残红）
-# ------------------------------------------------------------
-precmd() {
-    #tput sgr0
-    #print -n "%{$reset_color%}"
-    #print -n "%f"
-}
-
 EOF
 
-log_success ".zshrc 生成完成"
+log_success "Installed ~/.zshrc Successful! "
 
 # ============================================================
 # 6. 设置 Zsh 为默认 Shell
 # ============================================================
-log_info "设置 Zsh 为默认 Shell..."
+log_info "Setting Zsh as default shell for you..."
 ZSH_PATH=$(command -v zsh)
 if [ -n "$ZSH_PATH" ] && [ -f "$ZSH_PATH" ]; then
     if chsh -s "$ZSH_PATH" 2>/dev/null; then
-        log_success "已设置 Zsh 为默认 Shell"
+        log_success "Done. "
     else
         doas chsh -s "$ZSH_PATH" "$USER"
-        log_success "已设置 Zsh 为默认 Shell（通过 doas）"
+        log_success "Done. (Used doas/sudo)"
     fi
 else
-    log_error "Zsh 未安装或找不到"
+    log_error "Can't find zsh... Is it installed correctly? "
     exit 1
 fi
 
@@ -244,9 +247,9 @@ fi
 # ============================================================
 echo ""
 echo -e "${GREEN}========================================${NC}"
-echo -e "${GREEN}✅ 安装完成！${NC}"
+echo -e "${GREEN} * The installation has been done! ${NC}"
 echo -e "${GREEN}========================================${NC}"
 echo ""
-echo -e "运行 ${BLUE}zsh${NC} 立即体验，或注销重新登录。"
-echo -e "Powerlevel10k 配置向导: ${BLUE}p10k configure${NC}"
-echo -e "日志文件: ${BLUE}$LOG_FILE${NC}"
+echo -e "Run ${BLUE}zsh${NC} try it at once, or re-login. "
+echo -e "Powerlevel10k Configure Guide: ${BLUE}p10k configure${NC}"
+echo -e "The log file: ${BLUE}$LOG_FILE${NC}"

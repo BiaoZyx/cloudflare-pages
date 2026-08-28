@@ -102,7 +102,16 @@ log_error() {
 detect_distro() {
   log_info "Detecting system distribution..."
 
+
   if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+    echo "You're using GNU/Linux now. "
+    if command -v doas &>/dev/null; then
+      alias sudo=doas
+    if command -v sudo &>/dev/null; then
+      :
+    else
+      echo "There isn't a sudo or a doas in your system! "
+    fi
     if command -v apt &>/dev/null; then
       PKG_MANAGER="apt"
       PKG_UPDATE="sudo apt update"
@@ -123,11 +132,22 @@ detect_distro() {
       PKG_UPDATE="sudo xbps-install -S"
       PKG_INSTALL="sudo xbps-install -y"
       DISTRO="Void"
+    elif command -v opkg &>/dev/null; then
+      PKG_MANAGER="opkg"
+      PKG_UPDATE="sudo opkg update"
+      PKG_INSTALL="sudo opkg install"
+      DISTRO="OpenWRT"
+    elif command -v apk &>/dev/null; then
+      PKG_MANAGER="apk"
+      PKG_UPDATE="sudo apk update"
+      PKG_INSTALL="sudo apk add"
+      DISTRO="Alpine"
     else
       log_error "No supported package manager found"
       exit 1
     fi
   elif [[ "$OSTYPE" == "darwin"* ]]; then
+    echo "You're using macOS now. "
     if command -v brew &>/dev/null; then
       PKG_MANAGER="brew"
       PKG_UPDATE="brew update"
@@ -213,7 +233,7 @@ ask_mirror() {
 
     if [[ "$QUIET_MODE" != true ]]; then
         echo -e "\n${BLUE}[?] Use a GitHub mirror to speed up git clone?${NC}"
-        echo -e "  1) gitclone.com (recommended for China)"
+        echo -e "  1) gh-proxy.com (recommended for China)"
         echo -e "  2) kkgithub.com"
         echo -e "  3) hub.fastgit.xyz"
         echo -e "  n) No mirror"
@@ -224,8 +244,8 @@ ask_mirror() {
 
     case "$mirror_choice" in
         1)  USE_MIRROR=true
-            MIRROR_PREFIX="https://gitclone.com/github.com/"
-            log_success "Using gitclone.com mirror" ;;
+            MIRROR_PREFIX="https://gh-proxy.com/github.com/"
+            log_success "Using gh-proxy.com mirror" ;;
         2)  USE_MIRROR=true
             MIRROR_PREFIX="https://kkgithub.com/"
             log_success "Using kkgithub.com mirror" ;;
@@ -378,15 +398,21 @@ bindkey '^[^[[C' forward-word
 if command -v eza &> /dev/null; then
     export EZA_ICONS_AUTO=1
     alias ls='eza'
+    alias ll='eza -l'
+    alias la='eza -A'
+    alias l='eza -lA'
 else
     alias ls='ls --color=auto'
+    alias ll='ls -l'
+    alias la='ls -A'
+    alias l='ls -lAh'
 fi
-alias ll='ls -l'
-alias la='ls -A'
-alias l='ls -lah'
 alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
+alias .....='cd ../../../..'
+alias ......='cd ../../../../..'
+alias cls='clear'
 alias grep='grep --color=auto'
 alias ip='ip --color=auto' 
 
@@ -443,7 +469,8 @@ bindkey '^[[1;3B' history-substring-search-down  # Alt+Down
 
 bindkey '^[[1;2A' up-history        # Shift+Up
 bindkey '^[[1;2B' down-history      # Shift+Down
-
+bindkey '^[[5~' up-history          # PageUp
+bindkey '^[[6~' down-history        # PageDown
 EOF
   fi
 
@@ -537,8 +564,7 @@ download_fonts() {
   local success=true
   for font in "${fonts[@]}"; do
     IFS=':' read -r url_name file_name <<<"$font"
-    if ! curl -sL --connect-timeout 10 -o "$file_name" \
-      "https://github.com/romkatv/powerlevel10k-media/raw/master/$url_name"; then
+    if ! curl -sL --connect-timeout 10 -o "$file_name" $(mirror_url "https://github.com/romkatv/powerlevel10k-media/raw/master/$url_name"); then
       log_error "Failed to download: $file_name"
       success=false
     fi
@@ -579,7 +605,7 @@ choose_components() {
     echo -e "[2] Syntax highlighting (zsh-syntax-highlighting)"
     echo -e "[3] Autosuggestions (zsh-autosuggestions)"
     echo -e "[4] History substring search (history-substring-search)"
-    echo -e "[5] Powerlevel10k theme (with font提示)"
+    echo -e "[5] Powerlevel10k theme (with font install suggestion)"
     echo -e "[6] Install all"
     echo -e "[0] Exit"
     echo -e ""
@@ -668,19 +694,19 @@ install_components() {
   fi
 
   if [[ "$enable_syntax" == "yes" ]]; then
-    clone_plugin "https://github.com/zsh-users/zsh-syntax-highlighting.git" \
+    clone_plugin $(mirror_url "https://github.com/zsh-users/zsh-syntax-highlighting.git") \
       "$HOME/.zsh/plugins/zsh-syntax-highlighting" \
       "Syntax highlighting plugin"
   fi
 
   if [[ "$enable_autosuggest" == "yes" ]]; then
-    clone_plugin "https://github.com/zsh-users/zsh-autosuggestions.git" \
+    clone_plugin $(mirror_url "https://github.com/zsh-users/zsh-autosuggestions.git") \
       "$HOME/.zsh/plugins/zsh-autosuggestions" \
       "Autosuggestions plugin"
   fi
 
   if [[ "$enable_history" == "yes" ]]; then
-    clone_plugin "https://github.com/zsh-users/zsh-history-substring-search.git" \
+    clone_plugin $(mirror_url "https://github.com/zsh-users/zsh-history-substring-search.git") \
       "$HOME/.zsh/plugins/zsh-history-substring-search" \
       "History substring search plugin"
   fi

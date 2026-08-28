@@ -49,8 +49,8 @@ vt. 为…悲痛
 | *drown one's sorrows* | 借酒消愁 | 通过饮酒来暂时忘记悲伤 |
 
 ### **例句** ：
-[N-UNCOUNT]Sorrow is a feeling of deep sadness or regret. 悲伤; 歉疚
-> 例: Words cannot express my sorrow.语言不能表达我的悲伤。
+[N-UNCOUNT]**Sorrow** is a feeling of deep sadness or regret. 悲伤; 歉疚
+> 例: Words cannot express my **sorrow**.语言不能表达我的悲伤。
 
 ## struggling
 ### **释义** ：
@@ -59,4 +59,9 @@ adj. 奋斗的；努力的；苦斗的
 v. 努力；斗争；竞争（struggle的ing形式）
 CET4 TEM4  ( struggling, struggled, struggles )
 
+### **变形** ：
+| 形式 | 写法 | 例句 |
+| 原型 | *struggle* | *I struggle to get up early.* |
 
+### **例句** ：
+> Today I am **struggling** more than usual.
