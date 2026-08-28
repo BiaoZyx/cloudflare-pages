@@ -14,10 +14,10 @@ categories = ["终端配置"]
 curl https://biaozyx.pages.dev/scripts/setup_zsh.sh | bash    # 适用于大部分发行版
 ```
 ```bash
-curl https://biaozyx.pages.dev/scripts/setup_zsh-alpine.sh | sh    # 为 Alpine Linux 定制
+curl https://biaozyx.pages.dev/scripts/setup_zsh-alpine.sh | sh    # 专为 Alpine Linux 定制
 ```
 > 致大陆用户：
-> 由于大部分镜像站不复存在，建议科学上网使用。也欢迎告诉我新的镜像站至[我的邮箱](mailto:BiaoZyx@outlook.com)！
+> 由于大部分镜像站不复存在，现推荐[GH-Proxy.com](https://gh-proxy.com/)，建议科学上网使用。也欢迎告诉我新的镜像站至[我的邮箱](mailto:BiaoZyx@outlook.com)！
 
 ## 1. 前置准备
 
@@ -41,6 +41,8 @@ sudo pacman -S zsh
 
 # Fedora
 sudo dnf install zsh
+
+# ...
 ```
 
 ### 1.2 设为默认 Shell
@@ -50,6 +52,8 @@ chsh -s /usr/bin/zsh
 ```
 
 重新登录后生效。
+
+> 注：`chsh` 命令由 `shadow` 包提供。
 
 ### 1.3 创建必要目录
 
@@ -126,15 +130,20 @@ bindkey '^[^[[C' forward-word                   # Alacritty 等终端的序列
 if [ -e /usr/bin/eza ]; then      # 如果安装eza，那么替代ls
     export EZA_ICONS_AUTO=1       # 自动显示图标
     alias ls='eza'
+    alias ll='ls -l'
+    alias l='ls -lA'
 else
     alias ls='ls --color=auto'
+    alias ll='ls -l'
+    alias l='ls -lAh'
 fi
-alias ll='ls -alh'
-alias la='ls -A'
-alias l='ls -CF'
+
+# 快速返回上级目录 (可选)
 alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
+alias .....='cd ../../../..'
+alias ......='cd ../../../../..'
 ```
 
 
@@ -287,174 +296,7 @@ bindkey '^[[1;5C' forward-word
 bindkey '^R' history-incremental-search-backward
 ```
 
-
-## 7. 完整配置示例
-
-以下是一个完整的 `~/.zshrc` 配置，可直接复制使用：
-
-```bash
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block; everything else may go below.
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
-
-# Lines configured by zsh-newuser-install
-#setopt autocd
-#bindkey -v
-# End of lines configured by zsh-newuser-install
-# The following lines were added by compinstall
-zstyle :compinstall filename '/home/xue/.zshrc'
-
-autoload -Uz compinit
-compinit
-# End of lines added by compinstall
-
-# ============================================
-# 历史配置
-# ============================================
-HISTFILE=~/.zsh_history
-# 历史文件路径
-HISTSIZE=10000
-# 内存中保存的历史数量
-SAVEHIST=10000
-# 文件中保存的历史数量
-
-# 历史选项
-setopt INC_APPEND_HISTORY         # 立即追加而非退出时
-setopt EXTENDED_HISTORY           # 记录时间戳
-setopt HIST_IGNORE_DUPS           # 忽略连续重复命令
-setopt HIST_FIND_NO_DUPS          # 搜索时不显示重复
-
-# ============================================
-# 目录导航
-# ============================================
-setopt AUTO_CD                    # 输入目录名直接进入
-setopt AUTO_PUSHD                 # cd 自动推入目录栈
-setopt PUSHD_IGNORE_DUPS          # 目录栈不重复
-
-# ============================================
-# 功能优化
-# ============================================
-# 杂项
-setopt EXTENDED_GLOB              # 增强通配符支持
-setopt NO_CASE_GLOB               # 通配符不区分大小写
-setopt INTERACTIVE_COMMENTS  	  # 支持注释
-
-# 1. 确保使用 Emacs 模式的键位映射
-bindkey -e
-
-# 2. 核心编辑命令 (删除、移动)
-bindkey '^U' backward-kill-line                 # Ctrl+U: 删除光标前所有字符
-bindkey '^K' kill-line                          # Ctrl+K: 删除光标后所有字符
-bindkey '^W' backward-kill-word                 # Ctrl+W: 删除光标前一个单词
-bindkey '^[d' kill-word                         # Alt+D: 删除光标后一个单词
-
-# 3. 行内导航 (Home, End, Ctrl+Left/Right)
-# Home: 移动到行首
-bindkey '^[[H' beginning-of-line
-bindkey '^[[1~' beginning-of-line               # Alacritty 等终端的序列
-bindkey '^[OH' beginning-of-line                # Konsole 等终端的序列
-
-# End: 移动到行尾
-bindkey '^[[F' end-of-line
-bindkey '^[[4~' end-of-line                     # Alacritty 等终端的序列
-bindkey '^[OF' end-of-line                      # Konsole 等终端的序列
-
-# Ctrl + Left: 向左跳一个单词
-bindkey '^[[1;5D' backward-word
-bindkey '^[^[[D' backward-word                  # Alacritty 等终端的序列
-
-# Ctrl + Right: 向右跳一个单词
-bindkey '^[[1;5C' forward-word
-bindkey '^[^[[C' forward-word                   # Alacritty 等终端的序列
-
-# ============================================
-# 基础别名
-# ============================================
-if [ -e /usr/bin/eza ]; then
-	export EZA_ICONS_AUTO=1   # 自动显示图标
-	alias ls="eza"
-else
-	alias ls='ls --color=auto'
-fi
-
-alias ll='ls -l'
-alias la='ls -A'
-alias l='ls -lah'
-alias ..='cd ..'
-alias ...='cd ../..'
-alias ....='cd ../../..'
-
-# ============================================
-# 补全系统
-# ============================================
-fpath=(~/.zsh/completions
-$fpath)
-autoload -Uz compinit && compinit
-
-# 补全选项
-zstyle ':completion:*' menu select           # 菜单式补全
-zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}  # 颜色
-zstyle ':completion:*' verbose yes
-zstyle ':completion:*' completer _expand _complete _ignored
-
-# ============================================
-# 插件加载
-# ============================================
-# 1. 自动建议
-source ~/.zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
-
-# 2. 历史子串搜索
-source ~/.zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh
-
-# 3. 语法高亮（必须最后）
-source ~/.zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-
-# ============================================
-# Powerlevel10k 主题
-# ============================================
-source ~/powerlevel10k/powerlevel10k.zsh-theme
-
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-
-# ============================================
-# 按键绑定
-# ============================================
-# 上键：按前缀搜索历史
-bindkey '^[[A' history-substring-search-up
-bindkey '^[[B' history-substring-search-down
-
-# Ctrl+Delete 删除光标后单词
-bindkey '^[[3;5~' delete-word
-
-# Home/End 键
-bindkey '^[[H' beginning-of-line
-bindkey '^[[F' end-of-line
-
-# Ctrl+左/右 按单词移动
-bindkey '^[[1;5D' backward-word
-bindkey '^[[1;5C' forward-word
-
-# Ctrl+R 历史搜索（替代方案）
-bindkey '^R' history-incremental-search-backward
-
-# ============================================
-# 插件更新函数
-# ============================================
-update_zsh_plugins() {
-    for plugin in ~/.zsh/plugins/*; do
-        if [ -d "$plugin/.git" ]; then
-            echo "Updating $(basename $plugin)..."
-            git -C "$plugin" pull
-        fi
-    done
-}
-```
-
-## 进阶：精细控制上下键 – 让多行编辑与历史搜索不再冲突
+## 7. 进阶：精细控制上下键 – 让多行编辑与历史搜索不再冲突
 
 内容可以这样写（提供给你的素材）：
 
