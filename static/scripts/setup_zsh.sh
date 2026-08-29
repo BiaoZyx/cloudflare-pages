@@ -4,7 +4,7 @@
 # Zsh 交互式配置脚本 (Version 2.4)
 # ============================================================
 # 功能说明：
-#   1. 自动检测 Linux 发行版（Debian/Ubuntu/Arch/Fedora/Void/OpenWRT/Alpine 和 macOS）
+#   1. 自动检测 Linux 发行版（Debian/Ubuntu/Arch/Fedora/Void/OpenWRT/Alpine）和 macOS
 #   2. 交互式选择安装组件（基础配置、语法高亮、自动建议、历史搜索、Powerlevel10k）
 #   3. 支持非交互模式（-y）和静默模式（-q）
 #   4. 支持卸载功能（uninstall），卸载前自动备份
