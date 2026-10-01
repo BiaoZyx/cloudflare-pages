@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # ============================================================
-# Zsh 交互式配置脚本 (Version 2.4)
+# Zsh 交互式配置脚本 (Version 2.5)
 # ============================================================
 # 功能说明：
 #   1. 自动检测 Linux 发行版（Debian/Ubuntu/Arch/Fedora/Void/OpenWRT/Alpine）和 macOS
@@ -31,14 +31,14 @@ NC='\033[0m'
 # 运行时配置（会被命令行参数修改）
 # ============================================================
 VERSION=2.4
-USE_MIRROR=false                                          # 是否使用 kkgithub.com 镜像加速 git clone
-NON_INTERACTIVE=false                                     # 非交互模式（-y）：跳过所有用户询问，采用默认值
-QUIET_MODE=false                                          # 静默模式（-q）：不输出到终端，只写日志
-PKG_MANAGER=""                                            # 包管理器名称：apt/pacman/dnf/xbps/brew
-PKG_UPDATE=""                                             # 更新包数据库的命令
-PKG_INSTALL=""                                            # 安装软件包的命令
-DISTRO=""                                                 # 发行版名称（用于显示）
-LOG_FILE="$HOME/.zsh_install_$(date +%Y%m%d_%H%M%S).log"  # 日志文件，按时间戳命名
+USE_MIRROR=false                                         # 是否使用 kkgithub.com 镜像加速 git clone
+NON_INTERACTIVE=false                                    # 非交互模式（-y）：跳过所有用户询问，采用默认值
+QUIET_MODE=false                                         # 静默模式（-q）：不输出到终端，只写日志
+PKG_MANAGER=""                                           # 包管理器名称：apt/pacman/dnf/xbps/brew
+PKG_UPDATE=""                                            # 更新包数据库的命令
+PKG_INSTALL=""                                           # 安装软件包的命令
+DISTRO=""                                                # 发行版名称（用于显示）
+LOG_FILE="$HOME/.zsh_install_$(date +%Y%m%d_%H%M%S).log" # 日志文件，按时间戳命名
 
 # ============================================================
 # 错误处理函数
@@ -70,7 +70,7 @@ EOF
 # ============================================================
 # 日志函数（静默模式下只写文件，不输出到终端）
 # ============================================================
-log_info() {    # 普通操作
+log_info() { # 普通操作
   echo -e "${BLUE}[*] $1${NC}" >>"$LOG_FILE"
   if [[ "$QUIET_MODE" != true ]]; then
     echo -e "${BLUE}[*] $1${NC}"
@@ -91,7 +91,7 @@ log_warning() { # 警告
   fi
 }
 
-log_error() {   # 操作错误
+log_error() { # 操作错误
   echo -e "${RED}[✗] $1${NC}" >>"$LOG_FILE"
   if [[ "$QUIET_MODE" != true ]]; then
     echo -e "${RED}[✗] $1${NC}"
@@ -112,8 +112,8 @@ detect_distro() {
       :
     else
       echo "There isn't a sudo or a doas in your system! "
-	    echo "Please run this script again until doas/sudo is installed in your system! "
-	    exit 2
+      echo "Please run this script again until doas/sudo is installed in your system! "
+      exit 2
     fi
     if command -v apt &>/dev/null; then
       PKG_MANAGER="apt"
@@ -233,52 +233,56 @@ check_disk_space() {
 # 询问是否使用 GitHub 镜像
 # ============================================================
 ask_mirror() {
-    if [[ "$NON_INTERACTIVE" == true ]]; then
-        USE_MIRROR=false
-        return
-    fi
+  if [[ "$NON_INTERACTIVE" == true ]]; then
+    USE_MIRROR=false
+    return
+  fi
 
-    if [[ "$QUIET_MODE" != true ]]; then
-        echo -e "\n${BLUE}[?] Use a GitHub mirror to speed up git clone?${NC}"
-        echo -e "  1) gh-proxy.com (recommended for China)"
-        echo -e "  2) kkgithub.com"
-        echo -e "  3) hub.fastgit.xyz"
-        echo -e "  n) No mirror"
-        read -p "Choose (1/2/3/n): " mirror_choice
-    else
-        mirror_choice="n"
-    fi
+  if [[ "$QUIET_MODE" != true ]]; then
+    echo -e "\n${BLUE}[?] Use a GitHub mirror to speed up git clone?${NC}"
+    echo -e "  1) gh-proxy.com (recommended for China)"
+    echo -e "  2) kkgithub.com"
+    echo -e "  3) hub.fastgit.xyz"
+    echo -e "  n) No mirror"
+    read -p "Choose (1/2/3/n): " mirror_choice
+  else
+    mirror_choice="n"
+  fi
 
-    case "$mirror_choice" in
-        1)  USE_MIRROR=true
-            MIRROR_PREFIX="https://gh-proxy.com/github.com/"
-            log_success "Using gh-proxy.com mirror"
-			      ;;
-        2)  USE_MIRROR=true
-            MIRROR_PREFIX="https://kkgithub.com/"
-            log_success "Using kkgithub.com mirror"
-			      ;;
-        3)  USE_MIRROR=true
-            MIRROR_PREFIX="https://hub.fastgit.xyz/"
-            log_success "Using hub.fastgit.xyz mirror"
-			      ;;
-        *)  USE_MIRROR=false
-            log_info "Using direct GitHub"
-			      ;;
-    esac
+  case "$mirror_choice" in
+  1)
+    USE_MIRROR=true
+    MIRROR_PREFIX="https://gh-proxy.com/https://github.com/"
+    log_success "Using gh-proxy.com mirror"
+    ;;
+  2)
+    USE_MIRROR=true
+    MIRROR_PREFIX="https://kkgithub.com/"
+    log_success "Using kkgithub.com mirror"
+    ;;
+  3)
+    USE_MIRROR=true
+    MIRROR_PREFIX="https://hub.fastgit.xyz/"
+    log_success "Using hub.fastgit.xyz mirror"
+    ;;
+  *)
+    USE_MIRROR=false
+    log_info "Using direct GitHub"
+    ;;
+  esac
 }
 
 # ============================================================
 # URL 镜像转换函数
 # ============================================================
 mirror_url() {
-    local original_url=$1
-    if [[ "$USE_MIRROR" == true ]]; then
-        local path="${original_url#https://github.com/}"
-        echo "${MIRROR_PREFIX}${path}"
-    else
-        echo "$original_url"
-    fi
+  local original_url=$1
+  if [[ "$USE_MIRROR" == true ]]; then
+    local path="${original_url#https://github.com/}"
+    echo "${MIRROR_PREFIX}${path}"
+  else
+    echo "$original_url"
+  fi
 }
 
 # ============================================================
@@ -300,7 +304,7 @@ clone_plugin() {
     return 0
   fi
 
-  local final_url=$(mirror_url "$repo_url")
+  local final_url="$repo_url"
 
   for ((i = 1; i <= max_retries; i++)); do
     log_info "Cloning $plugin_name (attempt $i/$max_retries)"
@@ -347,7 +351,7 @@ generate_zshrc() {
 
   log_info "Generating ~/.zshrc..."
 
-  cat > ~/.zshrc << 'EOF'
+  cat >~/.zshrc <<'EOF'
 # ============================================================
 # Zsh Configuration File
 # Generated: $(date '+%Y-%m-%d %H:%M:%S')
@@ -440,7 +444,7 @@ zstyle ':completion:*' completer _expand _complete _ignored
 EOF
 
   if [[ "$enable_syntax" == "yes" ]]; then
-    cat >> ~/.zshrc << 'EOF'
+    cat >>~/.zshrc <<'EOF'
 # ------------------------------------------------------------
 # Syntax Highlighting (MUST BE LAST)
 # ------------------------------------------------------------
@@ -450,7 +454,7 @@ EOF
   fi
 
   if [[ "$enable_autosuggest" == "yes" ]]; then
-    cat >> ~/.zshrc << 'EOF'
+    cat >>~/.zshrc <<'EOF'
 # ------------------------------------------------------------
 # Autosuggestions
 # ------------------------------------------------------------
@@ -462,7 +466,7 @@ EOF
   fi
 
   if [[ "$enable_history" == "yes" ]]; then
-    cat >> ~/.zshrc << 'EOF'
+    cat >>~/.zshrc <<'EOF'
 # ------------------------------------------------------------
 # History Substring Search
 # ------------------------------------------------------------
@@ -486,7 +490,7 @@ EOF
   fi
 
   if [[ "$enable_p10k" == "yes" ]]; then
-    cat >> ~/.zshrc << 'EOF'
+    cat >>~/.zshrc <<'EOF'
 # ------------------------------------------------------------
 # Powerlevel10k Theme
 # ------------------------------------------------------------
@@ -699,7 +703,7 @@ install_components() {
     if [[ "$USE_MIRROR" = true ]]; then
       if curl -sL --connect-timeout 10 -o ~/.zsh/completions/_git https://gh-proxy.com/https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.zsh; then
         log_success "Git completion script downloaded"
-      else 
+      else
         log_warning "Git completion script download failed"
       fi
     else
