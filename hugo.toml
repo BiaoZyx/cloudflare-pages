@@ -47,9 +47,9 @@ theme = 'PaperMod'
   math = true
 
 [params.homeInfoParams]
-    Title = "👋Hi, there! "
+    Title = "Hi, there! 👋"
     Content = "Welcome to my Campsite! "
-    
+
 [markup]
   [markup.goldmark]
     [markup.goldmark.extensions]
