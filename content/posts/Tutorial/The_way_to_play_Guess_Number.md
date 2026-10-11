@@ -6,6 +6,7 @@ tags = ["教程"]
 categories = ["杂谈"]
 author = "BiaoZyx"
 math = true
+summary = "使用二分法游玩猜数字游戏"
 +++
 
 # 公式

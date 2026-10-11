@@ -4,6 +4,10 @@ locale = 'zh-cn'
 title = "Zivon Xue's Campsite"
 theme = 'PaperMod'
 
+# 允许使用 HMTL 语法
+[markup.goldmark.renderer]
+  unsafe = true
+
 # 添加作者信息
 [author]
   name = "Zivon Xue"
