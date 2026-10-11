@@ -4,9 +4,9 @@ locale = 'zh-cn'
 title = "Zivon Xue's Campsite"
 theme = 'PaperMod'
 
-# 允许使用 HMTL 语法
 [markup.goldmark.renderer]
-  unsafe = true
+  hardWraps = true  # 允许单行末尾直接渲染成 <br>
+  unsafe = true     # 允许使用 HTML 语法
 
 # 添加作者信息
 [author]
