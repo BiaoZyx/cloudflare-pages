@@ -5,6 +5,7 @@ draft = false
 tags = ["软件", "Python"]
 categories = ["软件开发"]
 author = "BiaoZyx"
+summary = "一个GUI猜数字小游戏的简单介绍"
 +++
 
 # 序言
@@ -12,29 +13,36 @@ author = "BiaoZyx"
 
 
 # 下载地址
-- 开始前先晾出下载地址：
+- 开始前先给出下载地址：
 https://biaozyx.lanzouq.com/b00ya27v2d
 （提取码：`guiGN`）
+
 # 内容展示
-### 所含文件
+## 所含文件
 `GuessNumber.exe`（Windows可执行程序）
 `GuessNumber.py`（源代码，可用后面教程编译）
 `highscores.json`（高分榜数据储存的文件，不要随意改变，否则程序会重置数据）
+
+## 截图
 ### 主程序界面
 ![image](/images/guiGN/main1.png)
 ![image](/images/guiGN/main2.png)
 ![image](/images/guiGN/main3.png)
+
 ### 游戏成功
 ![image](/images/guiGN/win.png)
+
 ### 游戏失败
 ![image](/images/guiGN/lose.png)
+
 ### 帮助文本
 ![image](/images/guiGN/help_info.png)
 
 # 编译
 - 好了，下面该讲讲怎么编译了。如果你会，可以跳过。如果你用的是Windows也可跳过。
 - 这里以Ubuntu/Debian作为示例
-#### 安装Python及pip
+
+## 安装Python及pip
 1. 首先，你得有Python。
 ```bash
 sudo apt install python3
@@ -52,7 +60,8 @@ pip install pyinstaller
 pyinstaller --onefile GuessNumber.py  #这里可以把"GuessNumber.py"换成任意.py文件
 ```
 有时，pip不能用，就得用到pipx。
-#### 安装pipx
+
+## 安装pipx
 ```bash
 sudo apt install pipx
 ```

@@ -5,10 +5,13 @@ draft = false
 tags = ["Bash", "Shell", "Config"]
 categories = ["终端配置"]
 author = "BiaoZyx"
+summary = "Bash的简单无大型插件配置"
 +++
 
+> 注意！v3.1后配置被分为多个文件，单独成为新的项目——[UniqueBash](https://github.com/BiaoZyx/UniqueBash)，如需使用，可克隆。本篇文章将不再更新！
+
 # 前言
-最近在折腾Duo S觉得上面bash一点颜色都没有，忒难看，于是开始自己动手美化bash，最终得到这篇文章的`.bashrc`文件，还请大家过目！
+最近在折腾Duo S觉得上面bash一点颜色都没有，很难看，于是开始自己动手美化bash，最终得到这篇文章的`.bashrc`文件，还请大家过目！
 由于这不算一个项目，所以就不把老版本内容保留了。最新版代码就贴在博客，可以通过右侧导航栏快速移到那里！
 
 # 效果展示

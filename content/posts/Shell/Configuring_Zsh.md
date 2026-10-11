@@ -4,6 +4,7 @@ date = '2026-05-19T19:15:31+08:00'
 draft = false
 tags = ["Zsh", "Shell", "Config"]
 categories = ["终端配置"]
+summary = "Zsh的简单无框架配置"
 +++
 
 本文档提供一套完整的 Zsh 配置方案，涵盖补全系统、历史搜索、语法高亮、自动建议及 `Powerlevel10k` 主题。所有步骤手动整合，不使用 `Oh My Zsh` 等框架，配置完全透明可控。
@@ -17,7 +18,7 @@ curl https://biaozyx.pages.dev/scripts/setup_zsh.sh | bash    # 适用于大部�
 curl https://biaozyx.pages.dev/scripts/setup_zsh-alpine.sh | sh    # 专为 Alpine Linux 定制
 ```
 > 致大陆用户：
-> 由于大部分镜像站不复存在，现推荐[GH-Proxy.com](https://gh-proxy.com/)，建议科学上网使用。也欢迎告诉我新的镜像站至[我的邮箱](mailto:BiaoZyx@outlook.com)！
+> 由于大部分镜像站不复存在，现推荐[GH-Proxy.com](https://gh-proxy.com/)。也欢迎告诉我新的镜像站至[我的邮箱](mailto:BiaoZyx@outlook.com)！
 
 ## 1. 前置准备
 
@@ -146,6 +147,21 @@ alias .....='cd ../../../..'
 alias ......='cd ../../../../..'
 ```
 
+如果你想要更多的别名，你完全可以自己添加！  
+这里是一些简单的额外别名示例：
+```
+alias cls='clear'
+alias grep='grep --color=auto'
+alias ip='ip --color=auto'
+alias fastfetch='fastfetch -l Alpine2'
+alias less='less -MNS --mouse --use-color'
+alias t='trans -e bing -b'
+
+alias g=git
+alias gst='g status'
+alias gp='g pull'
+alias gpu='g push'
+```
 
 ## 3. 补全系统
 
@@ -269,7 +285,7 @@ p10k configure
 
 ### 6.1 历史子串搜索绑定
 
-```bash
+```zsh
 # ============================================
 # 按键绑定
 # ============================================
@@ -280,20 +296,28 @@ bindkey '^[[B' history-substring-search-down
 
 ### 6.2 其他常用绑定
 
-```bash
-# Ctrl+Delete 删除光标后单词
-bindkey '^[[3;5~' delete-word
+```zsh
+bindkey -e
 
-# Home/End 键
+bindkey '^U' backward-kill-line
+bindkey '^K' kill-line
+bindkey '^W' backward-kill-word
+bindkey '^[d' kill-word
+
+bindkey '^[[3~' delete-char
+bindkey '^[[3;5~' kill-word
+
 bindkey '^[[H' beginning-of-line
+bindkey '^[[1~' beginning-of-line
+bindkey '^[OH' beginning-of-line
 bindkey '^[[F' end-of-line
+bindkey '^[[4~' end-of-line
+bindkey '^[OF' end-of-line
 
-# Ctrl+左/右 按单词移动
 bindkey '^[[1;5D' backward-word
+bindkey '^[^[[D' backward-word
 bindkey '^[[1;5C' forward-word
-
-# Ctrl+R 历史搜索（替代方案）
-bindkey '^R' history-incremental-search-backward
+bindkey '^[^[[C' forward-word
 ```
 
 ## 7. 进阶：精细控制上下键 – 让多行编辑与历史搜索不再冲突
