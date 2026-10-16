@@ -6,7 +6,9 @@ tags = ["Milk-V Duo S", "硬件", "嵌入式"]
 categories = ["硬件折腾"]
 author = "BiaoZyx"
 summary = "Duo S开发版初步体验"
+lightgallery = true
 +++
+{{< hero-slider >}}
 
 > 注：本文撰写时有多处技术不懂，所以有很多术语错误等，因此见谅。我有空会尽量更正，避免误导读者。
 

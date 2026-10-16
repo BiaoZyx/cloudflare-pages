@@ -6,7 +6,9 @@ tags = ["教程"]
 categories = ["杂谈"]
 author = "BiaoZyx"
 summary = "Markdown 语法及渲染示例"
+lightgallery = true
 +++
+{{< hero-slider >}}
 
 # Markdown 完全指南
 

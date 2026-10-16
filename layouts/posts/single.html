@@ -92,6 +92,54 @@
             {{- dict "Content" .Content "Ruby" $params.ruby "Fraction" $params.fraction "Fontawesome" $params.fontawesome | partial "function/content.html" | safeHTML -}}
         </div>
 
+        {{- /* Content */ -}}
+        <div class="content" id="content">
+            {{- dict "Content" .Content "Ruby" $params.ruby "Fraction" $params.fraction "Fontawesome" $params.fontawesome | partial "function/content.html" | safeHTML -}}
+        </div>
+
+        {{- /* Image Gallery Auto Init */ -}}
+        {{- if $params.lightgallery -}}
+        <script>
+          document.addEventListener('DOMContentLoaded', function () {
+            var content = document.querySelector('.content');
+            if (!content || typeof lightGallery === 'undefined') return;
+
+            var imgs = content.querySelectorAll('img');
+            if (imgs.length === 0) return;
+
+            var gallery = document.createElement('div');
+            gallery.className = 'auto-gallery';
+            gallery.style.display = 'none';
+
+            imgs.forEach(function (img, index) {
+              var a = document.createElement('a');
+              a.href = img.src;
+              a.setAttribute('data-src', img.src);
+              var clone = img.cloneNode(true);
+              a.appendChild(clone);
+              gallery.appendChild(a);
+
+              img.style.cursor = 'zoom-in';
+              img.addEventListener('click', function (e) {
+                e.preventDefault();
+                var links = gallery.querySelectorAll('a');
+                if (links[index]) links[index].click();
+              });
+            });
+
+            content.appendChild(gallery);
+
+            lightGallery(gallery, {
+              selector: 'a',
+              download: false
+            });
+          });
+        </script>
+        {{- end -}}
+
+        {{- /* Footer */ -}}
+        {{- partial "single/footer.html" . -}}
+
         {{- /* Footer */ -}}
         {{- partial "single/footer.html" . -}}
 

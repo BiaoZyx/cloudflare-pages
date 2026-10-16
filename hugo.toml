@@ -38,7 +38,7 @@ enableGitInfo = false
   defaultTheme = "auto"
   dateFormat = "2006-01-02"
   title = "Zivon's Campsite"
-  description = "在互联网角落留一些痕迹"
+  description = "在互联网的角落留下一些痕迹"
 
   [params.author]
     name = "Zivon Xue"

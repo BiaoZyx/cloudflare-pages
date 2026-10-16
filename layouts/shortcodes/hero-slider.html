@@ -1,0 +1,94 @@
+<script>
+// 引入霞鹜文楷（如果还没有）
+if (!document.querySelector('link[data-lxgw]')) {
+  var f = document.createElement('link');
+  f.rel = 'stylesheet';
+  f.href = 'https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont@1.7.0/style.css';
+  f.setAttribute('data-lxgw', '1');
+  document.head.appendChild(f);
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+  // 防重复
+  if (document.querySelector('.hero-slider')) return;
+
+  var title = document.querySelector('.single-title');
+  var content = document.querySelector('.content');
+  if (!title || !content) return;
+
+  var imgs = content.querySelectorAll('img');
+  if (imgs.length === 0) return;
+  var srcs = [];
+  imgs.forEach(function (img) {
+    if (srcs.indexOf(img.src) === -1) srcs.push(img.src);
+  });
+
+  var hero = document.createElement('div');
+  hero.className = 'swiper hero-slider';
+  hero.style.cssText =
+    'position:relative; width:100vw; margin-left:calc(50% - 50vw);' +
+    'height:440px; margin-bottom:2em; z-index:1;';
+
+  var wrapper = document.createElement('div');
+  wrapper.className = 'swiper-wrapper';
+  srcs.forEach(function (src) {
+    var slide = document.createElement('div');
+    slide.className = 'swiper-slide';
+    var image = document.createElement('img');
+    image.src = src;
+    image.style.cssText = 'width:100%; height:440px; object-fit:cover; object-position: 50% 15%; display:block;';
+    slide.appendChild(image);
+    wrapper.appendChild(slide);
+  });
+  hero.appendChild(wrapper);
+
+  var overlay = document.createElement('div');
+  overlay.style.cssText =
+    'position:absolute; inset:0; display:flex; align-items:flex-end; justify-content:center;' +
+    'background:rgba(0,0,0,0.35); z-index:2; pointer-events:none; padding:0 20px 60px;';
+  var titleClone = title.cloneNode(true);
+  titleClone.style.cssText =
+    'color:#fff; text-shadow:0 2px 16px rgba(0,0,0,0.85); margin:0; text-align:center;' +
+    'font-family:"LXGW WenKai","霞鹜文楷","ZCOOL KuaiLe","站酷快乐体",' +
+    '"Noto Sans SC",system-ui,sans-serif;' +
+    'font-size:3em; font-weight:700; line-height:1.25; letter-spacing:0.02em;';
+  overlay.appendChild(titleClone);
+  hero.appendChild(overlay);
+
+  var pagination = document.createElement('div');
+  pagination.className = 'swiper-pagination';
+  pagination.style.cssText = 'position:absolute; bottom:12px; width:100%; text-align:center; z-index:3;';
+  hero.appendChild(pagination);
+
+  var article = document.querySelector('article.page.single') || title.parentNode;
+  article.parentNode.insertBefore(hero, article);
+  title.style.display = 'none';
+
+  // 把 fixed 的目录推到 hero 下方
+  var toc = document.getElementById('toc-auto');
+  if (toc) {
+    toc.style.setProperty('top', (hero.offsetHeight + 40) + 'px', 'important');
+  }
+
+  function initSwiper() {
+    new Swiper(hero, {
+      loop: true,
+      autoplay: { delay: 4000, disableOnInteraction: false },
+      pagination: { el: pagination, clickable: true }
+    });
+  }
+
+  if (typeof Swiper === 'undefined') {
+    var link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = 'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css';
+    document.head.appendChild(link);
+    var s = document.createElement('script');
+    s.src = 'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js';
+    s.onload = initSwiper;
+    document.head.appendChild(s);
+  } else {
+    initSwiper();
+  }
+});
+</script>

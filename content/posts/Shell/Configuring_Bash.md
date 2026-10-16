@@ -6,7 +6,9 @@ tags = ["Bash", "Shell", "Config"]
 categories = ["终端配置"]
 author = "BiaoZyx"
 summary = "Bash的简单无大型插件配置"
+lightgallery = true
 +++
+{{< hero-slider >}}
 
 > 注意！v3.1后配置被分为多个文件，单独成为新的项目——[UniqueBash](https://github.com/BiaoZyx/UniqueBash)，如需使用，可克隆。本篇文章将不再更新！
 

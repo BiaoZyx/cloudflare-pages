@@ -6,7 +6,9 @@ tags = ["软件", "Python"]
 categories = ["软件开发"]
 author = "BiaoZyx"
 summary = "一个GUI猜数字小游戏的简单介绍"
+lightgallery = true
 +++
+{{< hero-slider >}}
 
 # 序言
 本文将会介绍“GUI猜数字”这款原创软件的界面、功能、编译等。详见后文~

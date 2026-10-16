@@ -5,4 +5,6 @@ draft = true
 tags = ["", ""]
 categories = [""]
 summary = ""
+lightgallery = true
 +++
+{{< hero-slider >}}
