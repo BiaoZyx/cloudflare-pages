@@ -1,0 +1,24 @@
+// 1. 定义浅色模式下的分割线颜色
+:root {
+  --hr-color: #999;
+}
+
+// 2. 定义深色模式下的分割线颜色（这里换成了更清晰的 #888）
+[data-theme="dark"] {
+  --hr-color: #888;
+}
+
+// 3. 应用颜色到所有分割线（单横线和双横线）
+hr {
+  border: none;
+  border-top: 1px solid var(--hr-color);
+  height: 0;
+  margin: 2em 0;
+}
+
+hr.double {
+  border: none;
+  border-top: 3px double var(--hr-color);
+  height: 0;
+  margin: 2em 0;
+}
