@@ -66,16 +66,27 @@ lightgallery = true
 
 ---
 
-## 青春绽放，赛场争先<br><small>*——南京市宁海中学分校秋季运动会圆满落幕*</small>
+## 青春启航，逐梦赛场<br><small>*——南京市宁海中学分校秋季运动会顺利开幕*</small>
 <small>*(消息 · 作者：马婧然)*</small>
 
-10月10日，南京市宁海中学分校秋季运动会经过一天激烈角逐，圆满落下帷幕。本次运动会设置田径、集体趣味等多个比赛项目，全校各班均选派运动员参加角逐。
+10月10日，南京市宁海中学分校秋季运动会正式拉开帷幕。本次运动会设置多个田径、集体趣味项目，全校各班选派运动员，即将在赛场上一展风采。
 
-开幕式上，各年级方阵迈着整齐的步伐入场，各具创意的展示彰显年级特色。赛场上，运动健儿驰骋赛场，在短跑、接力等项目中奋勇拼搏、突破自我，场边加油呐喊声此起彼伏。赛场下，师生通力协作，全力保障赛事平稳有序。
+<div class="post-gallery" style="display: flex; gap: 10px; margin: 1em 0; align-items: flex-start;">
+  <a href="/images/2026-Sports-Meeting/Flags.jpg" style="width: 60.7%;">
+    <img src="/images/2026-Sports-Meeting/Flags.jpg" alt="操场中间的旗帜" style="width: 100%; height: 300px; object-fit: cover; display: block;">
+  </a>
+  <a href="/images/2026-Sports-Meeting/Leaders.jpg" style="width: 37.5%;">
+    <img src="/images/2026-Sports-Meeting/Leaders.jpg" alt="升旗仪式上的领导们" style="width: 100%; height: 300px; object-fit: cover; display: block;">
+  </a>
+</div>
 
-本次运动会丰富了校园体育文化生活，强健了学生体魄，凝聚了班级向心力，充分展现出宁海中学分校学子昂扬向上的青春风貌。
+开幕式上，各年级方阵迈着整齐步伐入场，创意展示尽显年级特色。比赛中，运动健儿们在短跑、接力等项目中奋勇争先，不断突破自我，赛场边加油呐喊声此起彼伏。赛场下，师生分工协作，保障赛事有序进行。
 
-<hr style="border-top: 3px double #333; margin: 2em 0;">
+<img src="/images/2026-Sports-Meeting/Performance.png" alt="我班正在展示年级特色的同学" style="width: 100%; height: 270px; object-fit: cover; display: block;">
+
+此次运动会丰富了校园体育文化生活，增强了学生体质与班级凝聚力，充分展现了宁海中学分校学子昂扬向上的青春风采。
+
+<hr style="border-top: 5px double #333; margin: 2em 0;">
 
 ## *编审信息*
 初审：孔子洋、王惜诺、张业宏、汪子昱  
