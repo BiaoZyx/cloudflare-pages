@@ -1,24 +1,179 @@
-// 1. 定义浅色模式下的分割线颜色
+/* ============================================
+   1. 全局变量
+   ============================================ */
+
 :root {
   --hr-color: #999;
+  --link-hover: #4a9eff;
+  --toc-highlight: rgba(74, 158, 255, 0.3);
 }
 
-// 2. 定义深色模式下的分割线颜色（这里换成了更清晰的 #888）
-[data-theme="dark"] {
+[theme=dark] {
   --hr-color: #888;
+  --link-hover: #7cc4ff;
+  --toc-highlight: rgba(124, 196, 255, 0.35);
 }
 
-// 3. 应用颜色到所有分割线（单横线和双横线）
+
+/* ============================================
+   2. 基础元素
+   ============================================ */
+
+/* 分割线 */
 hr {
   border: none;
   border-top: 1px solid var(--hr-color);
   height: 0;
   margin: 2em 0;
+
+  &.double {
+    border-top: 3px double var(--hr-color);
+  }
 }
 
-hr.double {
-  border: none;
-  border-top: 3px double var(--hr-color);
-  height: 0;
-  margin: 2em 0;
+/* 正文图片：悬停微放大 */
+.content img {
+  border-radius: 4px;
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+
+  &:hover {
+    transform: scale(1.015);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.15);
+  }
+}
+
+
+/* ============================================
+   3. 链接系统
+   ============================================ */
+
+/* 全局：扫过下划线 + 变蓝 */
+a {
+  position: relative;
+  text-decoration: none;
+  transition: color 0.25s;
+
+  &::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -2px;
+    width: 0;
+    height: 1px;
+    background: currentColor;
+    transition: width 0.3s ease;
+  }
+
+  &:hover {
+    color: var(--link-hover);
+    &::after { width: 100%; }
+  }
+}
+
+/* 排除：图标、元数据、页脚、分页、返回顶部 */
+.social-icon::after,
+.post-meta a::after,
+.footer a::after,
+.pagination a::after,
+#back-to-top.fixed-button::after {
+  display: none;
+}
+
+.social-icon:hover,
+.post-meta a:hover,
+.footer a:hover,
+.pagination a:hover {
+  color: inherit;
+}
+
+
+/* ============================================
+   4. TOC 荧光笔
+   ============================================ */
+
+.toc a {
+  text-decoration: none;
+  background-image: linear-gradient(transparent 60%, var(--toc-highlight) 60%);
+  background-size: 0 100%;
+  background-repeat: no-repeat;
+  background-position: left bottom;
+  transition: background-size 0.3s ease;
+
+  &::after { display: none; }
+}
+
+/* 浅色 hover：变深 + 加粗 */
+html:not([theme=dark]) .toc a:hover {
+  background-size: 100% 100%;
+  font-weight: 700;
+  color: #000;
+}
+
+/* 深色 hover：变亮 + 加粗 */
+[theme=dark] .toc a:hover {
+  background-size: 100% 100%;
+  font-weight: 700;
+  color: #fff !important;
+}
+
+
+/* ============================================
+   5. 返回顶部按钮
+   ============================================ */
+
+/* 出现 / 消失：淡入淡出（父容器控制） */
+#fixed-buttons {
+  opacity: 0;
+  transition: opacity 0.3s ease, display 0.3s allow-discrete;
+}
+
+#fixed-buttons[style*="display: block"],
+#fixed-buttons[style*="display:block"] {
+  opacity: 1;
+}
+
+@starting-style {
+  #fixed-buttons[style*="display: block"],
+  #fixed-buttons[style*="display:block"] {
+    opacity: 0;
+  }
+}
+
+/* hover：整块淡蓝，不上浮不加光晕 */
+#back-to-top.fixed-button {
+  transition: background 0.25s ease, color 0.25s ease;
+
+  &:hover {
+    background: rgba(74, 158, 255, 0.18) !important;
+    color: #4a9eff !important;
+  }
+}
+
+[theme=dark] #back-to-top.fixed-button:hover {
+  background: rgba(74, 158, 255, 0.25) !important;
+  color: #7cc4ff !important;
+}
+
+
+/* ============================================
+   6. 阅读进度条
+   ============================================ */
+
+.reading-progress {
+  position: fixed;
+  top: 54px;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, #4a9eff, #48dbfb);
+  box-shadow: 0 0 8px rgba(74, 158, 255, 0.6);
+  transform-origin: left;
+  transform: scaleX(0);
+  z-index: 9998;
+  transition: transform 0.1s linear;
+  pointer-events: none;
+}
+
+[theme=dark] .reading-progress {
+  opacity: 0.85;
 }

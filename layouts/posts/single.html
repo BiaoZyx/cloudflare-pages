@@ -135,6 +135,30 @@
         {{- /* Footer */ -}}
         {{- partial "single/footer.html" . -}}
 
+        <script>
+        (function () {
+          var bar = document.createElement('div');
+          bar.className = 'reading-progress';
+          document.body.appendChild(bar);
+
+          var ticking = false;
+          function update() {
+            var h = document.documentElement;
+            var total = h.scrollHeight - h.clientHeight;
+            var pct = total > 0 ? h.scrollTop / total : 0;
+            bar.style.transform = 'scaleX(' + pct + ')';
+            ticking = false;
+          }
+          window.addEventListener('scroll', function () {
+            if (!ticking) {
+              requestAnimationFrame(update);
+              ticking = true;
+            }
+          });
+          update();
+        })();
+        </script>
+
         {{- /* Comment */ -}}
         {{- partial "comment.html" . -}}
     </article>
