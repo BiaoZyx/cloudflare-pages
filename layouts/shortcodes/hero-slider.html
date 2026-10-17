@@ -1,5 +1,5 @@
 <script>
-// 引入霞鹜文楷（如果还没有）
+// 动态引入霞鹜文楷（防重复）
 if (!document.querySelector('link[data-lxgw]')) {
   var f = document.createElement('link');
   f.rel = 'stylesheet';
@@ -9,7 +9,6 @@ if (!document.querySelector('link[data-lxgw]')) {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-  // 防重复
   if (document.querySelector('.hero-slider')) return;
 
   var title = document.querySelector('.single-title');
@@ -23,11 +22,22 @@ document.addEventListener('DOMContentLoaded', function () {
     if (srcs.indexOf(img.src) === -1) srcs.push(img.src);
   });
 
+  // 真正可视宽度（不含滚动条）
+  function viewportWidth() {
+    return document.documentElement.clientWidth;
+  }
+
   var hero = document.createElement('div');
   hero.className = 'swiper hero-slider';
-  hero.style.cssText =
-    'position:relative; width:100vw; margin-left:calc(50% - 50vw);' +
-    'height:440px; margin-bottom:2em; z-index:1;';
+
+  function applyWidth(el) {
+    var vw = viewportWidth();
+    el.style.cssText =
+      'position:relative; width:' + vw + 'px;' +
+      'margin-left:calc(50% - ' + (vw / 2) + 'px);' +
+      'height:440px; margin-bottom:2em; z-index:1;';
+  }
+  applyWidth(hero);
 
   var wrapper = document.createElement('div');
   wrapper.className = 'swiper-wrapper';
@@ -36,7 +46,7 @@ document.addEventListener('DOMContentLoaded', function () {
     slide.className = 'swiper-slide';
     var image = document.createElement('img');
     image.src = src;
-    image.style.cssText = 'width:100%; height:440px; object-fit:cover; object-position: 50% 15%; display:block;';
+    image.style.cssText = 'width:100%; height:440px; object-fit:cover; object-position:top; display:block;';
     slide.appendChild(image);
     wrapper.appendChild(slide);
   });
@@ -49,8 +59,7 @@ document.addEventListener('DOMContentLoaded', function () {
   var titleClone = title.cloneNode(true);
   titleClone.style.cssText =
     'color:#fff; text-shadow:0 2px 16px rgba(0,0,0,0.85); margin:0; text-align:center;' +
-    'font-family:"LXGW WenKai","霞鹜文楷","ZCOOL KuaiLe","站酷快乐体",' +
-    '"Noto Sans SC",system-ui,sans-serif;' +
+    'font-family:"LXGW WenKai","霞鹜文楷","Noto Sans SC",system-ui,sans-serif;' +
     'font-size:3em; font-weight:700; line-height:1.25; letter-spacing:0.02em;';
   overlay.appendChild(titleClone);
   hero.appendChild(overlay);
@@ -64,11 +73,15 @@ document.addEventListener('DOMContentLoaded', function () {
   article.parentNode.insertBefore(hero, article);
   title.style.display = 'none';
 
-  // 把 fixed 的目录推到 hero 下方
   var toc = document.getElementById('toc-auto');
   if (toc) {
     toc.style.setProperty('top', (hero.offsetHeight + 40) + 'px', 'important');
   }
+
+  // 窗口变化时重算宽度（防止缩放/旋转后溢出）
+  window.addEventListener('resize', function () {
+    applyWidth(hero);
+  });
 
   function initSwiper() {
     new Swiper(hero, {
