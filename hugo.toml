@@ -162,8 +162,8 @@ enableGitInfo = false
         emitMetadata = "0"
         inputPosition = "bottom"
         lazyLoading = false
-        lightTheme = "light"
-        darkTheme = "dark_dimmed"
+        lightTheme = "noborder_light"
+        darkTheme = "noborder_dark"
     [params.page.seo]
       images = []
       [params.page.seo.publisher]
