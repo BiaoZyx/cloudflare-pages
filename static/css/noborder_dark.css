@@ -97,10 +97,10 @@ main .gsc-loading-image {
 
 /* 调整基础字号 */
 html, :host {
-  font-size: 12px !important; /* 你可以改成 14px、16px 等 */
+  font-size: 15px !important; /* 你可以改成 14px、16px 等 */
 }
 
 /* 如果希望同步调整代码块等元素，可以补充这条 */
 .giscus {
-  --font-size-base: 12px !important;
+  --font-size-base: 15px !important;
 }
