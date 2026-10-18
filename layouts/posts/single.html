@@ -160,6 +160,14 @@
         </script>
 
         {{- /* Comment */ -}}
+
+        {{- $comment := .Scratch.Get "comment" | default dict -}}
+        {{- if $comment.enable -}}
+        <div class="comment-hint">
+          <span>留下你的痕迹</span>
+        </div>
+        {{- end -}}
+
         {{- partial "comment.html" . -}}
     </article>
 {{- end -}}

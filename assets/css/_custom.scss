@@ -75,7 +75,8 @@ a {
 .post-meta a::after,
 .footer a::after,
 .pagination a::after,
-#back-to-top.fixed-button::after {
+#fixed-buttons .fixed-button::after,
+#fixed-buttons-hidden .fixed-button::after {
   display: none;
 }
 
@@ -139,42 +140,50 @@ html:not([theme=dark]) .toc a:hover {
 
 
 /* ============================================
-   5. 返回顶部按钮
+   5. 右下角按钮
    ============================================ */
 
-/* 出现 / 消失：淡入淡出（父容器控制） */
-#fixed-buttons {
+/* 出现 / 消失：淡入淡出 */
+#fixed-buttons,
+#fixed-buttons-hidden {
   opacity: 0;
   transition: opacity 0.3s ease, display 0.3s allow-discrete;
 }
 
 #fixed-buttons[style*="display: block"],
-#fixed-buttons[style*="display:block"] {
+#fixed-buttons[style*="display:block"],
+#fixed-buttons-hidden[style*="display: block"],
+#fixed-buttons-hidden[style*="display:block"] {
   opacity: 1;
 }
 
 @starting-style {
   #fixed-buttons[style*="display: block"],
-  #fixed-buttons[style*="display:block"] {
+  #fixed-buttons[style*="display:block"],
+  #fixed-buttons-hidden[style*="display: block"],
+  #fixed-buttons-hidden[style*="display:block"] {
     opacity: 0;
   }
 }
 
-/* hover：整块淡蓝，不上浮不加光晕 */
-#back-to-top.fixed-button {
-  transition: background 0.25s ease, color 0.25s ease;
-
-  &:hover {
-    background: rgba(74, 158, 255, 0.18) !important;
-    color: #4a9eff !important;
-  }
+/* 所有 fixed-button：不管在哪个容器里都命中 */
+.fixed-button::after {
+  display: none !important;
 }
 
-[theme=dark] #back-to-top.fixed-button:hover {
+.fixed-button {
+  transition: background 0.25s ease, color 0.25s ease;
+}
+
+.fixed-button:hover {
+  background: rgba(74, 158, 255, 0.18) !important;
+  color: #4a9eff !important;
+}
+
+[theme=dark] .fixed-button:hover {
   background: rgba(74, 158, 255, 0.25) !important;
   color: #7cc4ff !important;
 }
-
 
 /* ============================================
    6. 阅读进度条

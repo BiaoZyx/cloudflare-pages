@@ -210,7 +210,7 @@ enableGitInfo = false
   priority = 0.5
 
 [permalinks]
-  posts = ":contentbasename"
+  posts = "/posts/:contentbasename"
 
 [outputs]
   home = ["HTML", "RSS", "JSON"]

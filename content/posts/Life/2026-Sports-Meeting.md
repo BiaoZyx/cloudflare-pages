@@ -36,8 +36,8 @@ lightgallery = true
 在一次采访李同学中，他说道：“我和杨同学已经很努力了。”同时开玩笑说：“这是我们在让着其他运动员罢了。”这份乐观的确珍贵。是啊，是足够努力了，怎会还有遗憾呢？北宋文豪王安石在《游褒禅山记》中写道：“尽吾志也而不能至者，可以无悔矣，其孰能仇之乎？”在失败之后，回想起在此期间为之所付出的，也能让人倍感安心而心无遗憾。二位在跑道上挥洒的汗水终会成为滋润未来成长的雨滴。
 
 <div class="post-gallery" style="display: flex; gap: 10px; margin: 1em 0; align-items: flex-start;">
-  <a href="/images/2026-Sports-Meeting/Yang_Zhenyu.jpg" style="width: 37.5%;">
-    <img src="/images/2026-Sports-Meeting/Yang_Zhenyu.jpg" alt="飞奔的杨同学" style="width: 100%; height: 300px; object-fit: cover; display: block;">
+  <a href="/images/2026-Sports-Meeting/Yang_Zhenyu-1000.jpg" style="width: 37.5%;">
+    <img src="/images/2026-Sports-Meeting/Yang_Zhenyu-1000.jpg" alt="飞奔的杨同学" style="width: 100%; height: 300px; object-fit: cover; display: block;">
   </a>
   <a href="/images/2026-Sports-Meeting/Li_Hongxiao.png" style="width: 60.7%;">
     <img src="/images/2026-Sports-Meeting/Li_Hongxiao.png" alt="进击的李同学" style="width: 100%; height: 300px; object-fit: cover; display: block;">
