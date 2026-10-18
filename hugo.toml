@@ -149,12 +149,26 @@ enableGitInfo = false
       Diaspora = false
       Threads = false
     [params.page.comment]
-      enable = false
+      enable = true
+      [params.page.comment.giscus]
+        enable = true
+        repo = "BiaoZyx/cloudflare-pages"
+        repoId = "R_kgDOTD_zJQ"
+        category = "Announcements"
+        categoryId = "DIC_kwDOTD_zJc4DI0wN"
+        mapping = "pathname"
+        lang = "zh-CN"
+        reactionsEnabled = "1"
+        emitMetadata = "0"
+        inputPosition = "bottom"
+        lazyLoading = false
+        lightTheme = "light"
+        darkTheme = "dark_dimmed"
     [params.page.seo]
       images = []
       [params.page.seo.publisher]
         name = "Zivon Xue"
-        logoUrl = "/image/logo_Z.svg"
+        logoUrl = "/images/logo_Z.svg"
 
   [params.typeit]
     speed = 100
