@@ -162,8 +162,8 @@ enableGitInfo = false
         emitMetadata = "0"
         inputPosition = "bottom"
         lazyLoading = false
-        lightTheme = "noborder_light"
-        darkTheme = "noborder_dark"
+        lightTheme = "https://biaozyx.pages.dev/css/noborder_light.css"
+        darkTheme = "https://biaozyx.pages.dev/css/noborder_dark.css"
     [params.page.seo]
       images = []
       [params.page.seo.publisher]
