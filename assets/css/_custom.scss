@@ -44,10 +44,36 @@ hr {
 
 /* 评论区提示 */
 .comment-hint {
-  display: block !important;
-  clear: both;
-  width: 100%;
-  margin: 3em 0 1.5em !important;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 2.5em 0 0;
+  color: #999;
+  font-size: 0.85em;
+  letter-spacing: 0.12em;
+  font-weight: 500;
+
+  &::before,
+  &::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--hr-color);
+    opacity: 0.6;
+  }
+
+  span {
+    white-space: nowrap;
+  }
+}
+
+[theme=dark] .comment-hint {
+  color: #777;
+}
+
+/* 压掉评论区上方 8rem 的内边距 */
+.single #comments {
+  padding-top: 1rem !important;
 }
 
 
