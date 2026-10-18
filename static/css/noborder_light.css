@@ -60,11 +60,11 @@ main {
   --color-fg-default: rgb(60 60 67);
   --color-fg-muted: rgb(60 60 67 / 75%);
   --color-fg-subtle: rgb(60 60 67 / 33%);
-  --color-canvas-default: rgb(255 255 255);
+  --color-canvas-default: rgb(248, 249, 251);      /* 从纯白改成浅灰 */
   --color-canvas-overlay: rgb(255 255 255);
   --color-canvas-inset: rgba(var(--bg-default), 0.85);
-  --color-canvas-subtle: rgba(var(--bg-default), 1);
-  --color-border-default: rgba(var(--bg-default), 0.85);
+  --color-canvas-subtle: rgb(240, 242, 245);        /* 输入框等元素略深一点 */
+  --color-border-default: rgba(0, 0, 0, 0.08);      /* 从透明改成淡边框 */
   --color-border-muted: rgb(175 184 193 / 20%);
   --color-neutral-muted: rgb(175 184 193 / 20%);
   --color-accent-fg: rgba(var(--primary-default), 0.85);
@@ -107,4 +107,10 @@ html, :host {
 /* 如果希望同步调整代码块等元素，可以补充这条 */
 .giscus {
   --font-size-base: 15px !important;
+}
+
+main {
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 8px;
+  padding: 1rem;
 }
