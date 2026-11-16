@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 # ============================================================
-# Alpine Linux Zsh 安装脚本 (Version 1.6)
+# Alpine Linux Zsh 安装脚本 (Version 1.8)
 # ============================================================
 
 set -e
@@ -97,8 +97,21 @@ log_info "Installing ~/.zshrc..."
 
 cat > ~/.zshrc << 'EOF'
 # ============================================================
-# Zsh Configuration for Alpine Linux (Full Version)
+# Zsh Configuration for Alpine Linux
 # ============================================================
+
+# ------------------------------------------------------------
+# Extentions
+# ------------------------------------------------------------
+# powerlevel10k
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
+# Autoload zoxide
+if command -v z; then
+    eval "$(zoxide init zsh)"
+fi
 
 # ------------------------------------------------------------
 # History
@@ -147,13 +160,12 @@ bindkey '^[^[[C' forward-word
 # Aliases
 # ------------------------------------------------------------
 if command -v eza &> /dev/null; then
-    export EZA_ICONS_AUTO=1
-    alias ls='eza'
-    alias ll='eza -l'
+    alias ls='eza --icon'
+    alias ll='eza -l --git --group --links'
     alias la='eza -A'
-    alias l='eza -lA'
+    alias l='eza -lA --git --group --links'
 else
-    alias ls='ls --color=auto'
+    alias ls='ls --color=always'
     alias ll='ls -l'
     alias la='ls -A'
     alias l='ls -lAh'
@@ -163,10 +175,18 @@ alias ...='cd ../..'
 alias ....='cd ../../..'
 alias .....='cd ../../../..'
 alias ......='cd ../../../../..'
-alias cls=clear
+alias cls='clear'
 alias grep='grep --color=auto'
 alias ip='ip --color=auto'
 alias fastfetch='fastfetch -l Alpine2'
+alias less='less -MNS --mouse --use-color'
+alias t='trans -e bing -b'
+
+alias g=git
+alias gst='git status'
+alias gp='git pull'
+alias gpu='git push'
+alias gc='git commit'
 
 # ------------------------------------------------------------
 # Completion

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # ============================================================
-# Zsh 交互式配置脚本 (Version 2.5)
+# Zsh 交互式配置脚本 (Version 2.6)
 # ============================================================
 # 功能说明：
 #   1. 自动检测 Linux 发行版（Debian/Ubuntu/Arch/Fedora/Void/OpenWRT/Alpine）和 macOS
@@ -30,7 +30,7 @@ NC='\033[0m'
 # ============================================================
 # 运行时配置（会被命令行参数修改）
 # ============================================================
-VERSION=2.4
+VERSION=2.6
 USE_MIRROR=false                                         # 是否使用 kkgithub.com 镜像加速 git clone
 NON_INTERACTIVE=false                                    # 非交互模式（-y）：跳过所有用户询问，采用默认值
 QUIET_MODE=false                                         # 静默模式（-q）：不输出到终端，只写日志
@@ -351,7 +351,7 @@ generate_zshrc() {
 
   log_info "Generating ~/.zshrc..."
 
-  cat >~/.zshrc <<'EOF'
+  cat > ~/.zshrc <<'EOF'
 # ============================================================
 # Zsh Configuration File
 # Generated: $(date '+%Y-%m-%d %H:%M:%S')
@@ -363,25 +363,17 @@ generate_zshrc() {
 HISTFILE=~/.zsh_history
 HISTSIZE=10000
 SAVEHIST=10000
-
-setopt INC_APPEND_HISTORY
-setopt EXTENDED_HISTORY
-setopt HIST_IGNORE_DUPS
-setopt HIST_FIND_NO_DUPS
+setopt INC_APPEND_HISTORY EXTENDED_HISTORY HIST_IGNORE_DUPS HIST_FIND_NO_DUPS
 
 # ------------------------------------------------------------
 # Directory Navigation
 # ------------------------------------------------------------
-setopt AUTO_CD
-setopt AUTO_PUSHD
-setopt PUSHD_IGNORE_DUPS
+setopt AUTO_CD AUTO_PUSHD PUSHD_IGNORE_DUPS
 
 # ------------------------------------------------------------
 # Misc Options
 # ------------------------------------------------------------
-setopt EXTENDED_GLOB
-setopt NO_CASE_GLOB
-setopt INTERACTIVE_COMMENTS
+setopt EXTENDED_GLOB NO_CASE_GLOB INTERACTIVE_COMMENTS
 
 # ------------------------------------------------------------
 # Key Bindings (Emacs mode)
@@ -392,6 +384,7 @@ bindkey '^U' backward-kill-line
 bindkey '^K' kill-line
 bindkey '^W' backward-kill-word
 bindkey '^[d' kill-word
+
 bindkey '^[[3~' delete-char
 bindkey '^[[3;5~' kill-word
 
@@ -411,13 +404,12 @@ bindkey '^[^[[C' forward-word
 # Aliases
 # ------------------------------------------------------------
 if command -v eza &> /dev/null; then
-    export EZA_ICONS_AUTO=1
-    alias ls='eza'
-    alias ll='ls -l'
-    alias la='ls -A'
-    alias l='ls -lA'
+    alias ls='eza --icon'
+    alias ll='eza -l --git --group --links'
+    alias la='eza -A'
+    alias l='eza -lA --git --group --links'
 else
-    alias ls='ls --color=auto || ls --color || ls -G'
+    alias ls='ls --color=always'
     alias ll='ls -l'
     alias la='ls -A'
     alias l='ls -lAh'
@@ -430,6 +422,13 @@ alias ......='cd ../../../../..'
 alias cls='clear'
 alias grep='grep --color=auto'
 alias ip='ip --color=auto'
+alias less='less -MNS --mouse --use-color'
+
+alias g=git
+alias gst='git status'
+alias gp='git pull'
+alias gpu='git push'
+alias gc='git commit'
 
 # ------------------------------------------------------------
 # Completion System
@@ -474,7 +473,7 @@ source ~/.zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.
 
 bindkey '^[[A' up-line-or-history
 bindkey '^[[B' down-line-or-history
-bindkey '^[OA' up-line-or-history   # 兼容某些终端（如 Konsole）
+bindkey '^[OA' up-line-or-history
 bindkey '^[OB' down-line-or-history
 
 bindkey '^R' history-incremental-search-backward # ^R
