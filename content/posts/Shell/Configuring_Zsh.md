@@ -262,7 +262,7 @@ git clone https://github.com/zsh-users/zsh-history-substring-search.git ~/.zsh/p
 
 ### 4.2 加载插件
 
-在 `~/.zshrc` 中按以下顺序添加（**顺序不可改变**）：
+在 `~/.zshrc` 中按以下顺序添加（**顺序大概率不可改变**，待测试）：
 
 ```zsh
 # ============================================
