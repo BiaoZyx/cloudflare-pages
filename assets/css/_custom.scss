@@ -42,8 +42,15 @@ hr {
   }
 }
 
+/* 主题 .post-nav 的 clearfix 漏了 clear，浮动的“上一篇/下一篇”链接会溢出到下方，
+   挤压建立 BFC 的元素（如评论区提示），移动端导致提示条宽度为 0、文字向右溢出页面 */
+.post-nav::after {
+  clear: both;
+}
+
 /* 评论区提示 */
 .comment-hint {
+  clear: both;
   display: flex;
   align-items: center;
   gap: 14px;
@@ -240,4 +247,25 @@ html:not([theme=dark]) .toc a:hover {
 
 [theme=dark] .reading-progress {
   opacity: 0.85;
+}
+
+/* ============================================
+   7. 画廊（lightGallery 灯箱）
+   ============================================ */
+
+/* 灯箱打开时锁住背景页面滚动，避免看图时误触把正文滚走、打乱阅读进度 */
+html.lg-on {
+  overflow: hidden;
+}
+
+/* 灯箱与遮罩贴紧可视区上下边缘，移动端地址栏收起/展开时也不会露出底下的正文 */
+@supports (height: 100dvh) {
+  .lg-outer {
+    height: 100dvh;
+  }
+
+  .lg-backdrop {
+    height: 100dvh;
+    bottom: auto;
+  }
 }
