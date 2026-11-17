@@ -234,14 +234,12 @@ html:not([theme=dark]) .toc a:hover {
   position: fixed;
   top: 0px;
   left: 0;
-  width: 100%;
+  width: 0;
   height: 3px;
   background: linear-gradient(90deg, #4a9eff, #48dbfb);
   box-shadow: 0 0 8px rgba(74, 158, 255, 0.6);
-  transform-origin: left;
-  transform: scaleX(0);
   z-index: 9998;
-  transition: transform 0.1s linear;
+  transition: width 0.1s linear;
   pointer-events: none;
 }
 
