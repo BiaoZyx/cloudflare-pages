@@ -108,11 +108,6 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-# Autoload zoxide
-if command -v z; then
-    eval "$(zoxide init zsh)"
-fi
-
 # ------------------------------------------------------------
 # History
 # ------------------------------------------------------------
