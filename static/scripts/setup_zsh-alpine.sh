@@ -156,7 +156,7 @@ bindkey '^[^[[C' forward-word
 # ------------------------------------------------------------
 # ls
 if command -v eza &> /dev/null; then
-    alias ls='eza --icon --sort=type'
+    alias ls='eza --icons --sort=type'
     alias ll='ls -l --git --group --links'
     alias la='ls -A'
     alias l='ls -lA --git --group --links'
