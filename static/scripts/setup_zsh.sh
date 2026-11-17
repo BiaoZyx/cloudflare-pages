@@ -463,10 +463,10 @@ extract() {
 # ------------------------------------------------------------
 # Completion System
 # ------------------------------------------------------------
-fpath=(~/.zsh/completions \$fpath)
+fpath=(~/.zsh/completions $fpath)
 autoload -Uz compinit && compinit
 zstyle ':completion:*' menu select
-zstyle ':completion:*' list-colors \${(s.:.)LS_COLORS}
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 zstyle ':completion:*' verbose yes
 zstyle ':completion:*' completer _expand _complete _ignored
 
