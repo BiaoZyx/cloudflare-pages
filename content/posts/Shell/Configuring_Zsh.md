@@ -11,10 +11,10 @@ summary = "Zsh的简单无框架配置"
 
 ## 在线安装
 你可以通过以下脚本进行在线安装：
-```bash
+```sh
 curl https://biaozyx.pages.dev/scripts/setup_zsh.sh | bash    # 适用于大部分发行版
 ```
-```bash
+```sh
 curl https://biaozyx.pages.dev/scripts/setup_zsh-alpine.sh | sh    # 专为 Alpine Linux 定制
 ```
 > 致大陆用户：
@@ -24,13 +24,13 @@ curl https://biaozyx.pages.dev/scripts/setup_zsh-alpine.sh | sh    # 专为 Alpi
 
 ### 1.1 确认 Zsh 已安装
 
-```bash
+```sh
 zsh --version
 ```
 
 如果未安装：
 
-```bash
+```sh
 # Void Linux
 sudo xbps-install zsh
 
@@ -48,7 +48,7 @@ sudo dnf install zsh
 
 ### 1.2 设为默认 Shell
 
-```bash
+```sh
 chsh -s /usr/bin/zsh
 ```
 
@@ -58,7 +58,7 @@ chsh -s /usr/bin/zsh
 
 ### 1.3 创建必要目录
 
-```bash
+```sh
 mkdir -p ~/.zsh/completions
 mkdir -p ~/.zsh/plugins
 ```
@@ -68,10 +68,11 @@ mkdir -p ~/.zsh/plugins
 
 编辑 `~/.zshrc`，添加以下基础设置：
 
-```bash
-# ============================================
+### 2.1. 行为设置
+```zsh
+# ======================================================
 # 历史配置
-# ============================================
+# ======================================================
 HISTFILE=~/.zsh_history           # 历史文件路径
 HISTSIZE=10000                    # 内存中保存的历史数量
 SAVEHIST=10000                    # 文件中保存的历史数量
@@ -82,21 +83,24 @@ setopt EXTENDED_HISTORY           # 记录时间戳
 setopt HIST_IGNORE_DUPS           # 忽略连续重复命令
 setopt HIST_FIND_NO_DUPS          # 搜索时不显示重复
 
-# ============================================
+# ======================================================
 # 目录导航
-# ============================================
+# ======================================================
 setopt AUTO_CD                    # 输入目录名直接进入
 setopt AUTO_PUSHD                 # cd 自动推入目录栈
 setopt PUSHD_IGNORE_DUPS          # 目录栈不重复
 
-# ============================================
+# ======================================================
 # 功能优化
-# ============================================
+# ======================================================
 # 杂项
 setopt EXTENDED_GLOB              # 增强通配符支持
 setopt NO_CASE_GLOB               # 通配符不区分大小写
-setopt INTERACTIVE_COMMENTS  	  # 支持注释
+setopt INTERACTIVE_COMMENTS  	    # 支持注释
 
+# ======================================================
+# 基础快捷键映射
+# ======================================================
 # 1. 确保使用 Emacs 模式的键位映射
 bindkey -e
 
@@ -125,18 +129,23 @@ bindkey '^[^[[D' backward-word                  # Alacritty 等终端的序列
 bindkey '^[[1;5C' forward-word
 bindkey '^[^[[C' forward-word                   # Alacritty 等终端的序列
 
-# ============================================
-# 基础别名
-# ============================================
-if [ -e /usr/bin/eza ]; then      # 如果安装eza，那么替代ls
-    export EZA_ICONS_AUTO=1       # 自动显示图标
-    alias ls='eza'
-    alias ll='ls -l'
-    alias l='ls -lA'
-else
-    alias ls='ls --color=auto'
-    alias ll='ls -l'
-    alias l='ls -lAh'
+### 2.2. 别名设置
+别名可以让你的日常操作更顺手。你可以添加以下内容：
+```zsh
+# ======================================================
+# 别名设置
+# ======================================================
+# ls 设置
+if command -v eza &> /dev/null; then          ### 如果 eza 存在，那么用 eza 替代 ls 
+    alias ls='eza --icon'                       # eza 显示 nerd 图标
+    alias ll='eza -l --git --group --links'     # eza 列表，显示 git, 组权限和硬链接数量
+    alias la='eza -A'                           # 显示除 '.' '..' 的所有项目
+    alias l='eza -lA --git --group --links'     # 同 'll'，但显示除 '.' '..' 的所有项目
+else                                          ### 回退到 ls
+    alias ls='ls --color=always'                # ls 总是显示 ANSI 颜色 (`ls | less -R` 会有颜色)
+    alias ll='ls -l'                            # 普通列表
+    alias la='ls -A'                            # 显示除 '.' '..' 的所有项目
+    alias l='ls -lAh'                           # 同 'll'，但显示除 '.' '..' 的所有项目 
 fi
 
 # 快速返回上级目录 (可选)
@@ -147,35 +156,80 @@ alias .....='cd ../../../..'
 alias ......='cd ../../../../..'
 ```
 
-如果你想要更多的别名，你完全可以自己添加！  
+当然，如果你想要更多的别名，你完全可以自己添加！  
 这里是一些简单的额外别名示例：
+```zsh
+# 实用类
+alias cls='clear'                               # 使用 dos 风格短清屏命令
 ```
-alias cls='clear'
-alias grep='grep --color=auto'
-alias ip='ip --color=auto'
-alias fastfetch='fastfetch -l Alpine2'
-alias less='less -MNS --mouse --use-color'
-alias t='trans -e bing -b'
 
-alias g=git
-alias gst='g status'
+```zsh
+# 多彩输出
+alias grep='grep --color=auto'                  # grep
+alias ip='ip --color=auto'                      # iproute2
+```
+
+```zsh
+# Git 类
+alias g=git                                     # git -> g
+alias gst='g status' 
 alias gp='g pull'
 alias gpu='g push'
+alias gc='git commit'
+alias gd='git diff'
+alias gl='git log --online --gragh'
 ```
+
+```zsh
+# 自定义类
+alias less='less -MNS --mouse --use-color'
+alias t='trans -e bing -b'
+```
+
+### 2.3. 快捷函数
+当有的功能以别名的方式实现不了，或很难实现，那么你可以尝试使用 **Shell 函数**。
+
+以下是简单的常用函数示例，使用 **POSIX 语法**，你也可以在 **任何支持 POSIX 语法的 Shell** 使用：
+```zsh
+# ======================================================
+# 函数配置
+# ======================================================
+# mkcd(): mkdir 并进入，仅跟随 1 个参数
+mkcd() { [ -n "$1" ] || { echo "usage: mkcd <dir>" >&2; return 1; }; mkdir -p "$1" && cd "$1"; }
+
+# extract(): 快捷解压命令，自动识别后缀 (可自定义添加更多)
+extract() {
+    [ -f "$1" ] || { echo "extract: no such file: $1" >&2; return 1; }
+    case "$1" in
+        *.tar.gz|*.tgz) tar xzf "$1" ;;
+        *.tar.xz)       tar xJf "$1" ;;
+        *.tar.bz2)      tar xjf "$1" ;;
+        *.zip)          unzip "$1" ;;
+        *.gz)           gunzip "$1" ;;
+        *)              echo "extract: unknown format: $1" >&2; return 1 ;;
+    esac
+}
+```
+
 
 ## 3. 补全系统
 
 ### 3.1 下载 Git 补全脚本
-
-```bash
+使用官方地址：
+```sh
 curl -o ~/.zsh/completions/_git https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.zsh
+```
+
+或者使用镜像：
+```sh
+curl -o ~/.zsh/completions/_git https://gh-proxy.com/https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.zsh
 ```
 
 ### 3.2 初始化补全系统
 
 在 `~/.zshrc` 中添加：
 
-```bash
+```zsh
 # ============================================
 # 补全系统
 # ============================================
@@ -194,7 +248,7 @@ zstyle ':completion:*' completer _expand _complete _ignored
 
 ### 4.1 下载插件
 
-```bash
+```zsh
 # 语法高亮（命令有效/无效变色）
 git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.zsh/plugins/zsh-syntax-highlighting
 
@@ -209,7 +263,7 @@ git clone https://github.com/zsh-users/zsh-history-substring-search.git ~/.zsh/p
 
 在 `~/.zshrc` 中按以下顺序添加（**顺序不可改变**）：
 
-```bash
+```zsh
 # ============================================
 # 插件加载
 # ============================================
@@ -219,13 +273,13 @@ source ~/.zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 # 2. 历史子串搜索
 source ~/.zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh
 
-# 3. 语法高亮（必须最后）
+# 3. 语法高亮
 source ~/.zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 ```
 
 ### 4.3 可选：插件配置
-
-```bash
+简单插件配置示例，建议放到各自加载部分的后面：
+```zsh
 # 自动建议颜色（灰色）
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#787878"
 
@@ -241,7 +295,7 @@ ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern)
 
 ### 5.1 安装 Powerlevel10k
 
-```bash
+```sh
 git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/powerlevel10k
 ```
 
@@ -249,33 +303,34 @@ git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/powerlevel10k
 
 在 `~/.zshrc` 中添加（放在插件加载之前）：
 
-```bash
+```zsh
 # ============================================
 # Powerlevel10k 主题
 # ============================================
 source ~/powerlevel10k/powerlevel10k.zsh-theme
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 ```
 
 ### 5.3 安装字体
 
 Powerlevel10k 需要 Nerd Font 显示图标：
 
-1. 下载 [MesloLGS NF](https://github.com/romkatv/powerlevel10k#meslo-nerd-font-patched-for-powerlevel10k) 字体文件
-2. 双击安装到系统
-3. 在终端模拟器设置中将字体改为 `MesloLGS NF`
+1. **下载 [MesloLGS NF](https://github.com/romkatv/powerlevel10k#meslo-nerd-font-patched-for-powerlevel10k)** *（或者你更喜欢的）* 或 **使用包管理器安装** 字体文件
+2. 安装到系统（如果你是下载下来的话）
+3. 在终端模拟器设置中将字体改为 `MesloLGS NF` *（或其他）*
 
 ### 5.4 运行配置向导
 
 首次加载 Zsh 时会自动启动配置向导，也可手动运行：
 
-```bash
+```zsh
 p10k configure
 ```
 
 配置向导会询问：
 - 字体是否正确显示
 - Prompt 样式（推荐 **Lean**）
-- 显示哪些元素（时间、命令执行时间、Git 状态等）
+- 显示哪些元素（时间、命令执行时间等）
 - 是否使用图标（推荐 **Unicode**）
 
 配置文件保存在 `~/.p10k.zsh`。
@@ -294,31 +349,6 @@ bindkey '^[[A' history-substring-search-up
 bindkey '^[[B' history-substring-search-down
 ```
 
-### 6.2 其他常用绑定
-
-```zsh
-bindkey -e
-
-bindkey '^U' backward-kill-line
-bindkey '^K' kill-line
-bindkey '^W' backward-kill-word
-bindkey '^[d' kill-word
-
-bindkey '^[[3~' delete-char
-bindkey '^[[3;5~' kill-word
-
-bindkey '^[[H' beginning-of-line
-bindkey '^[[1~' beginning-of-line
-bindkey '^[OH' beginning-of-line
-bindkey '^[[F' end-of-line
-bindkey '^[[4~' end-of-line
-bindkey '^[OF' end-of-line
-
-bindkey '^[[1;5D' backward-word
-bindkey '^[^[[D' backward-word
-bindkey '^[[1;5C' forward-word
-bindkey '^[^[[C' forward-word
-```
 
 ## 7. 进阶：精细控制上下键 – 让多行编辑与历史搜索不再冲突
 
@@ -383,7 +413,7 @@ bindkey '^R' history-incremental-search-backward
 
 ## 9. 插件更新
 
-```bash
+```zsh
 # 更新所有插件
 update_zsh_plugins() {
     for plugin in ~/.zsh/plugins/*; do

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # ============================================================
-# Zsh 交互式配置脚本 (Version 2.6)
+# Zsh 交互式配置脚本 (Version 2.7)
 # ============================================================
 # 功能说明：
 #   1. 自动检测 Linux 发行版（Debian/Ubuntu/Arch/Fedora/Void/OpenWRT/Alpine）和 macOS
@@ -30,7 +30,7 @@ NC='\033[0m'
 # ============================================================
 # 运行时配置（会被命令行参数修改）
 # ============================================================
-VERSION=2.6
+VERSION=2.7
 USE_MIRROR=false                                         # 是否使用 kkgithub.com 镜像加速 git clone
 NON_INTERACTIVE=false                                    # 非交互模式（-y）：跳过所有用户询问，采用默认值
 QUIET_MODE=false                                         # 静默模式（-q）：不输出到终端，只写日志
@@ -403,6 +403,7 @@ bindkey '^[^[[C' forward-word
 # ------------------------------------------------------------
 # Aliases
 # ------------------------------------------------------------
+# ls
 if command -v eza &> /dev/null; then
     alias ls='eza --icon'
     alias ll='eza -l --git --group --links'
@@ -414,21 +415,50 @@ else
     alias la='ls -A'
     alias l='ls -lAh'
 fi
+
+# Parent dirs
 alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
 alias .....='cd ../../../..'
 alias ......='cd ../../../../..'
+
+# Useful ones
 alias cls='clear'
+
+# Colorful outputs
 alias grep='grep --color=auto'
 alias ip='ip --color=auto'
-alias less='less -MNS --mouse --use-color'
 
+# Git
 alias g=git
 alias gst='git status'
 alias gp='git pull'
 alias gpu='git push'
 alias gc='git commit'
+alias gd='git diff'
+alias gl='git log --oneline --graph'
+
+# customs
+#alias less='less -MNS --mouse --use-color'
+#alias t='trans -e bing -b'
+
+# ------------------------------------------------------------
+# Functions
+# ------------------------------------------------------------
+mkcd() { [ -n "$1" ] || { echo "usage: mkcd <dir>" >&2; return 1; }; mkdir -p "$1" && cd "$1"; }
+
+extract() {
+    [ -f "$1" ] || { echo "extract: no such file: $1" >&2; return 1; }
+    case "$1" in
+        *.tar.gz|*.tgz) tar xzf "$1" ;;
+        *.tar.xz)       tar xJf "$1" ;;
+        *.tar.bz2)      tar xjf "$1" ;;
+        *.zip)          unzip "$1" ;;
+        *.gz)           gunzip "$1" ;;
+        *)              echo "extract: unknown format: $1" >&2; return 1 ;;
+    esac
+}
 
 # ------------------------------------------------------------
 # Completion System
@@ -445,7 +475,7 @@ EOF
   if [[ "$enable_syntax" == "yes" ]]; then
     cat >>~/.zshrc <<'EOF'
 # ------------------------------------------------------------
-# Syntax Highlighting (MUST BE LAST)
+# Syntax Highlighting
 # ------------------------------------------------------------
 source ~/.zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 

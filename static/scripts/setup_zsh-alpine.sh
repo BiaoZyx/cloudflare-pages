@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 # ============================================================
-# Alpine Linux Zsh 安装脚本 (Version 1.8)
+# Alpine Linux Zsh 安装脚本 (Version 1.9)
 # ============================================================
 
 set -e
@@ -154,6 +154,7 @@ bindkey '^[^[[C' forward-word
 # ------------------------------------------------------------
 # Aliases
 # ------------------------------------------------------------
+# ls
 if command -v eza &> /dev/null; then
     alias ls='eza --icon'
     alias ll='eza -l --git --group --links'
@@ -165,23 +166,52 @@ else
     alias la='ls -A'
     alias l='ls -lAh'
 fi
+
+# Parent dirs
 alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
 alias .....='cd ../../../..'
 alias ......='cd ../../../../..'
+
+# Useful ones
 alias cls='clear'
+
+# Colorful outputs
 alias grep='grep --color=auto'
 alias ip='ip --color=auto'
-alias fastfetch='fastfetch -l Alpine2'
-alias less='less -MNS --mouse --use-color'
-alias t='trans -e bing -b'
 
+# Git
 alias g=git
 alias gst='git status'
 alias gp='git pull'
 alias gpu='git push'
 alias gc='git commit'
+alias gd='git diff'
+alias gl='git log --oneline --graph'
+
+# customs
+alias fastfetch='fastfetch -l Alpine2'
+#alias less='less -MNS --mouse --use-color'
+#alias t='trans -e bing -b'
+
+# ------------------------------------------------------------
+# Functions
+# ------------------------------------------------------------
+mkcd() { [ -n "$1" ] || { echo "usage: mkcd <dir>" >&2; return 1; }; mkdir -p "$1" && cd "$1"; }
+
+extract() {
+    [ -f "$1" ] || { echo "extract: no such file: $1" >&2; return 1; }
+    case "$1" in
+        *.tar.gz|*.tgz) tar xzf "$1" ;;
+        *.tar.xz)       tar xJf "$1" ;;
+        *.tar.bz2)      tar xjf "$1" ;;
+        *.zip)          unzip "$1" ;;
+        *.gz)           gunzip "$1" ;;
+        *)              echo "extract: unknown format: $1" >&2; return 1 ;;
+    esac
+}
+
 
 # ------------------------------------------------------------
 # Completion
@@ -193,7 +223,7 @@ zstyle ':completion:*' verbose yes
 zstyle ':completion:*' completer _expand _complete _ignored
 
 # ------------------------------------------------------------
-# Syntax Highlighting (MUST BE LAST)
+# Syntax Highlighting
 # ------------------------------------------------------------
 if [ -f /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]; then
     source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
