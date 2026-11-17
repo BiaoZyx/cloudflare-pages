@@ -182,7 +182,7 @@ alias gl='git log --online --gragh'
 
 ```zsh
 # 自定义类
-alias less='less -MNS --mouse --use-color'
+alias less='less -MSR --mouse --use-color'
 alias t='trans -e bing -b'
 ```
 

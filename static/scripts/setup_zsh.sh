@@ -440,7 +440,7 @@ alias gd='git diff'
 alias gl='git log --oneline --graph'
 
 # customs
-#alias less='less -MNS --mouse --use-color'
+alias less='less -MSR --mouse --use-color'
 #alias t='trans -e bing -b'
 
 # ------------------------------------------------------------
