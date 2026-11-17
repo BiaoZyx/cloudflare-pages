@@ -128,6 +128,7 @@ bindkey '^[^[[D' backward-word                  # Alacritty 等终端的序列
 # Ctrl + Right: 向右跳一个单词
 bindkey '^[[1;5C' forward-word
 bindkey '^[^[[C' forward-word                   # Alacritty 等终端的序列
+```
 
 ### 2.2. 别名设置
 别名可以让你的日常操作更顺手。你可以添加以下内容：
