@@ -138,9 +138,9 @@ bindkey '^[^[[C' forward-word                   # Alacritty 等终端的序列
 # ls 设置
 if command -v eza &> /dev/null; then          ### 如果 eza 存在，那么用 eza 替代 ls 
     alias ls='eza --icon --sort=type'           # eza 显示 nerd 图标，并按文件类型排序
-    alias ll='eza -l --git --group --links'     # eza 列表，显示 git, 组权限和硬链接数量
-    alias la='eza -A'                           # 显示除 '.' '..' 的所有项目
-    alias l='eza -lA --git --group --links'     # 同 'll'，但显示除 '.' '..' 的所有项目
+    alias ll='ls -l --git --group --links'      # eza 列表，显示 git, 组权限和硬链接数量
+    alias la='ls -A'                            # 显示除 '.' '..' 的所有项目
+    alias l='ls -lA --git --group --links'      # 同 'll'，但显示除 '.' '..' 的所有项目
 else                                          ### 回退到 ls
     alias ls='ls --color=always'                # ls 总是显示 ANSI 颜色 (`ls | less -R` 会有颜色)
     alias ll='ls -l'                            # 普通列表
