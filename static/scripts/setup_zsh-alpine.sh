@@ -20,19 +20,19 @@ NC='\033[0m'
 LOG_FILE="$HOME/.zsh_install_alpine_$(date +%Y%m%d_%H%M%S).log"
 
 log_info() {
-    echo -e "${BLUE}[*] $1${NC}" | tee -a "$LOG_FILE"
+    printf '%b\n' "${BLUE}[*] $1${NC}" | tee -a "$LOG_FILE"
 }
 
 log_success() {
-    echo -e "${GREEN}[✓] $1${NC}" | tee -a "$LOG_FILE"
+    printf '%b\n' "${GREEN}[✓] $1${NC}" | tee -a "$LOG_FILE"
 }
 
 log_warning() {
-    echo -e "${YELLOW}[!] $1${NC}" | tee -a "$LOG_FILE"
+    printf '%b\n' "${YELLOW}[!] $1${NC}" | tee -a "$LOG_FILE"
 }
 
 log_error() {
-    echo -e "${RED}[✗] $1${NC}" | tee -a "$LOG_FILE"
+    printf '%b\n' "${RED}[✗] $1${NC}" | tee -a "$LOG_FILE"
 }
 
 # ============================================================
@@ -44,25 +44,28 @@ log_error() {
 #fi
 
 # ============================================================
-# 定义提权工具
+# 定义提权工具（POSIX sh 中 alias 在非交互脚本里不展开，改用变量）
 # ============================================================
-if command -v /usr/bin/doas &>/dev/null; then
-    :
-elif command -v /usr/bin/sudo &>/dev/null; then
-    alias doas=sudo
+if command -v doas >/dev/null 2>&1; then
+    PRIV=doas
+elif command -v sudo >/dev/null 2>&1; then
+    PRIV=sudo
+else
+    echo "There isn't a sudo or a doas in your system!" >&2
+    exit 2
 fi
 
 # ============================================================
 # 1. 安装 shadow（提供 chsh）
 # ============================================================
 log_info "Installing shadow (to use chsh)..."
-doas apk add shadow 2>&1 | tee -a "$LOG_FILE"
+$PRIV apk add shadow 2>&1 | tee -a "$LOG_FILE"
 
 # ============================================================
 # 2. 安装 Zsh 和插件
 # ============================================================
 log_info "Installing zsh with its plugins..."
-doas apk add \
+$PRIV apk add \
     zsh \
     zsh-autosuggestions \
     zsh-syntax-highlighting \
@@ -155,7 +158,7 @@ bindkey '^[^[[C' forward-word
 # Aliases
 # ------------------------------------------------------------
 # ls
-if command -v eza &> /dev/null; then
+if command -v eza >/dev/null 2>&1; then
     alias ls='eza --icons --sort=type --color=always'
     alias ll='ls -l --git --group --links'
     alias la='ls -A'
@@ -279,7 +282,7 @@ if [ -n "$ZSH_PATH" ] && [ -f "$ZSH_PATH" ]; then
     if chsh -s "$ZSH_PATH" 2>/dev/null; then
         log_success "Done. "
     else
-        doas chsh -s "$ZSH_PATH" "$USER"
+        $PRIV chsh -s "$ZSH_PATH" "$USER"
         log_success "Done. (Used doas/sudo)"
     fi
 else
@@ -291,10 +294,10 @@ fi
 # 7. 完成
 # ============================================================
 echo ""
-echo -e "${GREEN}========================================${NC}"
-echo -e "${GREEN} * The installation has been done! ${NC}"
-echo -e "${GREEN}========================================${NC}"
+printf '%b\n' "${GREEN}========================================${NC}"
+printf '%b\n' "${GREEN} * The installation has been done! ${NC}"
+printf '%b\n' "${GREEN}========================================${NC}"
 echo ""
-echo -e "Run ${BLUE}zsh${NC} try it at once, or re-login. "
-echo -e "Powerlevel10k Configure Guide: ${BLUE}p10k configure${NC}"
-echo -e "The log file: ${BLUE}$LOG_FILE${NC}"
+printf '%b\n' "Run ${BLUE}zsh${NC} try it at once, or re-login. "
+printf '%b\n' "Powerlevel10k Configure Guide: ${BLUE}p10k configure${NC}"
+printf '%b\n' "The log file: ${BLUE}$LOG_FILE${NC}"

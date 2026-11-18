@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/sh
 
 # ============================================================
 # Zsh 交互式配置脚本 (Version 2.7)
@@ -14,8 +14,7 @@
 # ============================================================
 # Shell 选项（必须放在最前面）
 # ============================================================
-set -eE         # 任何命令失败立即退出，并且 ERR trap 生效
-set -o pipefail # 管道中任何命令失败，整个管道返回失败码
+set -e          # 任何命令失败立即退出（POSIX sh 无 pipefail / ERR trap）
 # 注意：没有用 set -u，因为某些发行版检测时变量可能为空，会导致误退出
 
 # ============================================================
@@ -43,7 +42,7 @@ LOG_FILE="$HOME/.zsh_install_$(date +%Y%m%d_%H%M%S).log" # 日志文件，按时
 # ============================================================
 # 错误处理函数
 # ============================================================
-trap 'echo -e "${RED}[✗] Script error at line $LINENO${NC}" >&2' ERR
+# POSIX sh 没有 ERR trap / LINENO，错误由各函数中的 log_error 报告。
 
 # ============================================================
 # 帮助信息
@@ -71,30 +70,30 @@ EOF
 # 日志函数（静默模式下只写文件，不输出到终端）
 # ============================================================
 log_info() { # 普通操作
-  echo -e "${BLUE}[*] $1${NC}" >>"$LOG_FILE"
-  if [[ "$QUIET_MODE" != true ]]; then
-    echo -e "${BLUE}[*] $1${NC}"
+  printf '%b\n' "${BLUE}[*] $1${NC}" >>"$LOG_FILE"
+  if [ "$QUIET_MODE" != true ]; then
+    printf '%b\n' "${BLUE}[*] $1${NC}"
   fi
 }
 
 log_success() { # 操作完成
-  echo -e "${GREEN}[✓] $1${NC}" >>"$LOG_FILE"
-  if [[ "$QUIET_MODE" != true ]]; then
-    echo -e "${GREEN}[✓] $1${NC}"
+  printf '%b\n' "${GREEN}[✓] $1${NC}" >>"$LOG_FILE"
+  if [ "$QUIET_MODE" != true ]; then
+    printf '%b\n' "${GREEN}[✓] $1${NC}"
   fi
 }
 
 log_warning() { # 警告
-  echo -e "${YELLOW}[!] $1${NC}" >>"$LOG_FILE"
-  if [[ "$QUIET_MODE" != true ]]; then
-    echo -e "${YELLOW}[!] $1${NC}"
+  printf '%b\n' "${YELLOW}[!] $1${NC}" >>"$LOG_FILE"
+  if [ "$QUIET_MODE" != true ]; then
+    printf '%b\n' "${YELLOW}[!] $1${NC}"
   fi
 }
 
 log_error() { # 操作错误
-  echo -e "${RED}[✗] $1${NC}" >>"$LOG_FILE"
-  if [[ "$QUIET_MODE" != true ]]; then
-    echo -e "${RED}[✗] $1${NC}"
+  printf '%b\n' "${RED}[✗] $1${NC}" >>"$LOG_FILE"
+  if [ "$QUIET_MODE" != true ]; then
+    printf '%b\n' "${RED}[✗] $1${NC}"
   fi
 }
 
@@ -104,67 +103,88 @@ log_error() { # 操作错误
 detect_distro() {
   log_info "Detecting system distribution..."
 
-  if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+  # POSIX sh 没有 $OSTYPE：用 uname 和 musl 特征自行判断
+  case "$(uname -s)" in
+    Linux)
+      if [ -f /etc/alpine-release ] || { command -v ldd >/dev/null 2>&1 && ldd --version 2>&1 | grep -qi musl; }; then
+        OSTYPE="linux-musl"
+      else
+        OSTYPE="linux-gnu"
+      fi
+      ;;
+    Darwin) OSTYPE="darwin" ;;
+    *)      OSTYPE="unknown" ;;
+  esac
+
+  if [ "$OSTYPE" = "linux-gnu" ]; then
     #echo "You're using Linux with GLibC Library now. "
-    if command -v doas &>/dev/null; then
-      alias sudo=doas
-    elif command -v sudo &>/dev/null; then
-      :
+    if command -v doas >/dev/null 2>&1; then
+      PRIV=doas
+    elif command -v sudo >/dev/null 2>&1; then
+      PRIV=sudo
     else
       echo "There isn't a sudo or a doas in your system! "
       echo "Please run this script again until doas/sudo is installed in your system! "
       exit 2
     fi
-    if command -v apt &>/dev/null; then
+    if command -v apt >/dev/null 2>&1; then
       PKG_MANAGER="apt"
-      PKG_UPDATE="sudo apt update"
-      PKG_INSTALL="sudo apt install -y"
+      PKG_UPDATE="$PRIV apt update"
+      PKG_INSTALL="$PRIV apt install -y"
       DISTRO="Debian/Ubuntu"
-    elif command -v pacman &>/dev/null; then
+    elif command -v pacman >/dev/null 2>&1; then
       PKG_MANAGER="pacman"
-      PKG_UPDATE="sudo pacman -Sy"
-      PKG_INSTALL="sudo pacman -S --noconfirm"
+      PKG_UPDATE="$PRIV pacman -Sy"
+      PKG_INSTALL="$PRIV pacman -S --noconfirm"
       DISTRO="Arch"
-    elif command -v dnf &>/dev/null; then
+    elif command -v dnf >/dev/null 2>&1; then
       PKG_MANAGER="dnf"
-      PKG_UPDATE="sudo dnf check-update || true"
-      PKG_INSTALL="sudo dnf install -y"
+      PKG_UPDATE="$PRIV dnf check-update || true"
+      PKG_INSTALL="$PRIV dnf install -y"
       DISTRO="Fedora"
-    elif command -v xbps-install &>/dev/null; then
+    elif command -v xbps-install >/dev/null 2>&1; then
       PKG_MANAGER="xbps"
-      PKG_UPDATE="sudo xbps-install -S"
-      PKG_INSTALL="sudo xbps-install -y"
+      PKG_UPDATE="$PRIV xbps-install -S"
+      PKG_INSTALL="$PRIV xbps-install -y"
       DISTRO="Void-GLibC"
-    elif command -v opkg &>/dev/null; then
+    elif command -v opkg >/dev/null 2>&1; then
       PKG_MANAGER="opkg"
-      PKG_UPDATE="sudo opkg update"
-      PKG_INSTALL="sudo opkg install"
+      PKG_UPDATE="$PRIV opkg update"
+      PKG_INSTALL="$PRIV opkg install"
       DISTRO="OpenWRT-GLibC"
     else
       log_error "No supported package manager found"
       exit 1
     fi
-  elif [[ "$OSTYPE" == "linux-musl"* ]]; then
+  elif [ "$OSTYPE" = "linux-musl" ]; then
     #echo "You are using Linux with Musl C Library now. "
-    if command -v apk &>/dev/null; then
+    if command -v doas >/dev/null 2>&1; then
+      PRIV=doas
+    elif command -v sudo >/dev/null 2>&1; then
+      PRIV=sudo
+    else
+      echo "There isn't a sudo or a doas in your system! "
+      exit 2
+    fi
+    if command -v apk >/dev/null 2>&1; then
       PKG_MANAGER="apk"
-      PKG_UPDATE="sudo apk update"
-      PKG_INSTALL="sudo apk add"
+      PKG_UPDATE="$PRIV apk update"
+      PKG_INSTALL="$PRIV apk add"
       DISTRO="Alpine"
-    elif command -v opkg &>/dev/null; then
+    elif command -v opkg >/dev/null 2>&1; then
       PKG_MANAGER="opkg"
-      PKG_UPDATE="sudo opkg update"
-      PKG_INSTALL="sudo opkg install"
+      PKG_UPDATE="$PRIV opkg update"
+      PKG_INSTALL="$PRIV opkg install"
       DISTRO="OpenWRT-Musl"
-    elif command -v xbps-install &>/dev/null; then
+    elif command -v xbps-install >/dev/null 2>&1; then
       PKG_MANAGER="xbps"
-      PKG_UPDATE="sudo xbps-install -S"
-      PKG_INSTALL="sudo xbps-install -y"
+      PKG_UPDATE="$PRIV xbps-install -S"
+      PKG_INSTALL="$PRIV xbps-install -y"
       DISTRO="Void-Musl"
     fi
-  elif [[ "$OSTYPE" == "darwin"* ]]; then
+  elif [ "$OSTYPE" = "darwin" ]; then
     #echo "You're using macOS now. "
-    if command -v brew &>/dev/null; then
+    if command -v brew >/dev/null 2>&1; then
       PKG_MANAGER="brew"
       PKG_UPDATE="brew update"
       PKG_INSTALL="brew install"
@@ -179,9 +199,9 @@ detect_distro() {
   fi
 
   log_success "Detected: $DISTRO (package manager: $PKG_MANAGER)"
-  echo -e "${BLUE}[*] Log file: $LOG_FILE${NC}" >>"$LOG_FILE"
-  if [[ "$QUIET_MODE" != true ]]; then
-    echo -e "${BLUE}[*] Log file: $LOG_FILE${NC}"
+  printf '%b\n' "${BLUE}[*] Log file: $LOG_FILE${NC}" >>"$LOG_FILE"
+  if [ "$QUIET_MODE" != true ]; then
+    printf '%b\n' "${BLUE}[*] Log file: $LOG_FILE${NC}"
   fi
 }
 
@@ -204,7 +224,7 @@ install_dependencies() {
     ;;
   esac
 
-  if ! command -v zsh &>/dev/null; then
+  if ! command -v zsh >/dev/null 2>&1; then
     log_error "Zsh installation failed or not found. "
     exit 1
   fi
@@ -218,10 +238,10 @@ install_dependencies() {
 check_disk_space() {
   log_info "Checking disk space..."
 
-  local required_space=50
-  local available_space=$(df -m "$HOME" | awk 'NR==2 {print $4}')
+  required_space=50
+  available_space=$(df -m "$HOME" | awk 'NR==2 {print $4}')
 
-  if [[ "$available_space" -lt "$required_space" ]]; then
+  if [ "$available_space" -lt "$required_space" ]; then
     log_error "Insufficient disk space (need ${required_space}MB, have ${available_space}MB)"
     exit 1
   fi
@@ -233,18 +253,19 @@ check_disk_space() {
 # 询问是否使用 GitHub 镜像
 # ============================================================
 ask_mirror() {
-  if [[ "$NON_INTERACTIVE" == true ]]; then
+  if [ "$NON_INTERACTIVE" = true ]; then
     USE_MIRROR=false
     return
   fi
 
-  if [[ "$QUIET_MODE" != true ]]; then
-    echo -e "\n${BLUE}[?] Use a GitHub mirror to speed up git clone?${NC}"
-    echo -e "  1) gh-proxy.com (recommended for China)"
-    echo -e "  2) kkgithub.com"
-    echo -e "  3) hub.fastgit.xyz"
-    echo -e "  n) No mirror"
-    read -p "Choose (1/2/3/n): " mirror_choice
+  if [ "$QUIET_MODE" != true ]; then
+    printf '%b\n' "\n${BLUE}[?] Use a GitHub mirror to speed up git clone?${NC}"
+    printf '%b\n' "  1) gh-proxy.com (recommended for China)"
+    printf '%b\n' "  2) kkgithub.com"
+    printf '%b\n' "  3) hub.fastgit.xyz"
+    printf '%b\n' "  n) No mirror"
+    printf '%s' "Choose (1/2/3/n): "
+    IFS= read -r mirror_choice
   else
     mirror_choice="n"
   fi
@@ -276,9 +297,9 @@ ask_mirror() {
 # URL 镜像转换函数
 # ============================================================
 mirror_url() {
-  local original_url=$1
-  if [[ "$USE_MIRROR" == true ]]; then
-    local path="${original_url#https://github.com/}"
+  original_url=$1
+  if [ "$USE_MIRROR" = true ]; then
+    path="${original_url#https://github.com/}"
     echo "${MIRROR_PREFIX}${path}"
   else
     echo "$original_url"
@@ -289,12 +310,12 @@ mirror_url() {
 # 克隆插件（含重试机制）
 # ============================================================
 clone_plugin() {
-  local repo_url=$1
-  local target_dir=$2
-  local plugin_name=$3
-  local max_retries=3
+  repo_url=$1
+  target_dir=$2
+  plugin_name=$3
+  max_retries=3
 
-  if [[ -d "$target_dir" ]]; then
+  if [ -d "$target_dir" ]; then
     log_info "$plugin_name already exists, trying to update..."
     if git -C "$target_dir" pull --rebase >/dev/null 2>&1; then
       log_success "$plugin_name updated"
@@ -304,19 +325,21 @@ clone_plugin() {
     return 0
   fi
 
-  local final_url="$repo_url"
+  final_url="$repo_url"
 
-  for ((i = 1; i <= max_retries; i++)); do
+  i=1
+  while [ "$i" -le "$max_retries" ]; do
     log_info "Cloning $plugin_name (attempt $i/$max_retries)"
     if git clone --depth=1 --config http.timeout=10 "$final_url" "$target_dir" >/dev/null 2>&1; then
       log_success "$plugin_name installed"
       return 0
     else
-      if [[ $i -lt $max_retries ]]; then
+      if [ "$i" -lt "$max_retries" ]; then
         log_warning "Clone failed, retrying..."
         sleep 2
       fi
     fi
+    i=$((i + 1))
   done
 
   log_error "$plugin_name clone failed, skipping"
@@ -327,14 +350,14 @@ clone_plugin() {
 # 备份现有 ~/.zshrc
 # ============================================================
 backup_zshrc() {
-  local old_backups=$(ls -t ~/.zshrc.backup.* 2>/dev/null | tail -n +6)
-  if [[ -n "$old_backups" ]]; then
+  old_backups=$(ls -t ~/.zshrc.backup.* 2>/dev/null | tail -n +6)
+  if [ -n "$old_backups" ]; then
     echo "$old_backups" | xargs rm -f
     log_info "Cleaned old backups"
   fi
 
-  if [[ -f ~/.zshrc ]]; then
-    local backup_file="$HOME/.zshrc.backup.$(date +%Y%m%d_%H%M%S)"
+  if [ -f ~/.zshrc ]; then
+    backup_file="$HOME/.zshrc.backup.$(date +%Y%m%d_%H%M%S)"
     cp ~/.zshrc "$backup_file"
     log_success "Backed up existing .zshrc to $backup_file"
   fi
@@ -344,10 +367,10 @@ backup_zshrc() {
 # 生成 ~/.zshrc 配置文件
 # ============================================================
 generate_zshrc() {
-  local enable_syntax=$1
-  local enable_autosuggest=$2
-  local enable_history=$3
-  local enable_p10k=$4
+  enable_syntax=$1
+  enable_autosuggest=$2
+  enable_history=$3
+  enable_p10k=$4
 
   log_info "Generating ~/.zshrc..."
 
@@ -472,7 +495,7 @@ zstyle ':completion:*' completer _expand _complete _ignored
 
 EOF
 
-  if [[ "$enable_syntax" == "yes" ]]; then
+  if [ "$enable_syntax" = "yes" ]; then
     cat >>~/.zshrc <<'EOF'
 # ------------------------------------------------------------
 # Syntax Highlighting
@@ -482,7 +505,7 @@ source ~/.zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 EOF
   fi
 
-  if [[ "$enable_autosuggest" == "yes" ]]; then
+  if [ "$enable_autosuggest" = "yes" ]; then
     cat >>~/.zshrc <<'EOF'
 # ------------------------------------------------------------
 # Autosuggestions
@@ -494,7 +517,7 @@ ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 EOF
   fi
 
-  if [[ "$enable_history" == "yes" ]]; then
+  if [ "$enable_history" = "yes" ]; then
     cat >>~/.zshrc <<'EOF'
 # ------------------------------------------------------------
 # History Substring Search
@@ -518,7 +541,7 @@ bindkey '^[[6~' down-history        # PageDown
 EOF
   fi
 
-  if [[ "$enable_p10k" == "yes" ]]; then
+  if [ "$enable_p10k" = "yes" ]; then
     cat >>~/.zshrc <<'EOF'
 # ------------------------------------------------------------
 # Powerlevel10k Theme
@@ -557,9 +580,9 @@ EOF
 # 安装 Powerlevel10k 主题
 # ============================================================
 install_p10k() {
-  local p10k_dir="$HOME/powerlevel10k"
+  p10k_dir="$HOME/powerlevel10k"
 
-  if [[ -d "$p10k_dir" ]]; then
+  if [ -d "$p10k_dir" ]; then
     log_info "Powerlevel10k already exists, trying to update..."
     git -C "$p10k_dir" pull --rebase >/dev/null 2>&1 &&
       log_success "Powerlevel10k updated" ||
@@ -568,7 +591,7 @@ install_p10k() {
   fi
 
   log_info "Installing Powerlevel10k..."
-  local p10k_url=$(mirror_url "https://github.com/romkatv/powerlevel10k.git")
+  p10k_url=$(mirror_url "https://github.com/romkatv/powerlevel10k.git")
 
   if git clone --depth=1 --config http.timeout=10 "$p10k_url" "$p10k_dir" >/dev/null 2>&1; then
     log_success "Powerlevel10k installed"
@@ -577,14 +600,15 @@ install_p10k() {
     return 1
   fi
 
-  if [[ "$QUIET_MODE" != true ]]; then
-    echo -e "${YELLOW}[!] Powerlevel10k requires a Nerd Font${NC}"
-    echo -e "${YELLOW}    Recommended: MesloLGS NF - https://github.com/romkatv/powerlevel10k#meslo-nerd-font-patched-for-powerlevel10k${NC}"
+  if [ "$QUIET_MODE" != true ]; then
+    printf '%b\n' "${YELLOW}[!] Powerlevel10k requires a Nerd Font${NC}"
+    printf '%b\n' "${YELLOW}    Recommended: MesloLGS NF - https://github.com/romkatv/powerlevel10k#meslo-nerd-font-patched-for-powerlevel10k${NC}"
   fi
 
-  if [[ "$NON_INTERACTIVE" == false ]] && [[ "$QUIET_MODE" != true ]]; then
-    read -p "Download fonts to ~/Downloads? (y/N): " install_font
-    if [[ "$install_font" =~ ^[Yy]$ ]]; then
+  if [ "$NON_INTERACTIVE" = false ] && [ "$QUIET_MODE" != true ]; then
+    printf '%s' "Download fonts to ~/Downloads? (y/N): "
+    IFS= read -r install_font
+    if [ "$install_font" = "y" ] || [ "$install_font" = "Y" ]; then
       download_fonts
     fi
   fi
@@ -598,26 +622,24 @@ download_fonts() {
   mkdir -p ~/Downloads
   cd ~/Downloads
 
-  local fonts=(
-    "MesloLGS%20NF%20Regular.ttf:MesloLGS_NF_Regular.ttf"
-    "MesloLGS%20NF%20Bold.ttf:MesloLGS_NF_Bold.ttf"
-    "MesloLGS%20NF%20Italic.ttf:MesloLGS_NF_Italic.ttf"
-    "MesloLGS%20NF%20Bold%20Italic.ttf:MesloLGS_NF_Bold_Italic.ttf"
-  )
-
-  local success=true
-  for font in "${fonts[@]}"; do
-    IFS=':' read -r url_name file_name <<<"$font"
+  success=true
+  for font in \
+    "MesloLGS%20NF%20Regular.ttf:MesloLGS_NF_Regular.ttf" \
+    "MesloLGS%20NF%20Bold.ttf:MesloLGS_NF_Bold.ttf" \
+    "MesloLGS%20NF%20Italic.ttf:MesloLGS_NF_Italic.ttf" \
+    "MesloLGS%20NF%20Bold%20Italic.ttf:MesloLGS_NF_Bold_Italic.ttf"; do
+    url_name=${font%%:*}
+    file_name=${font#*:}
     if ! curl -sL --connect-timeout 10 -o "$file_name" $(mirror_url "https://github.com/romkatv/powerlevel10k-media/raw/master/$url_name"); then
       log_error "Failed to download: $file_name"
       success=false
     fi
   done
 
-  if [[ "$success" == true ]]; then
+  if [ "$success" = true ]; then
     log_success "Fonts downloaded to ~/Downloads"
-    if [[ "$QUIET_MODE" != true ]]; then
-      echo -e "${YELLOW}Please install fonts manually, then set terminal font to 'MesloLGS NF'${NC}"
+    if [ "$QUIET_MODE" != true ]; then
+      printf '%b\n' "${YELLOW}Please install fonts manually, then set terminal font to 'MesloLGS NF'${NC}"
     fi
   else
     log_warning "Some fonts failed to download, please get them manually"
@@ -630,7 +652,7 @@ download_fonts() {
 # 交互式组件选择菜单
 # ============================================================
 choose_components() {
-  if [[ "$NON_INTERACTIVE" == true ]]; then
+  if [ "$NON_INTERACTIVE" = true ]; then
     enable_base="yes"
     enable_syntax="yes"
     enable_autosuggest="yes"
@@ -639,21 +661,22 @@ choose_components() {
     return
   fi
 
-  if [[ "$QUIET_MODE" != true ]]; then
-    echo -e "\n${BLUE}========================================${NC}"
-    echo -e "${BLUE}Zsh Configuration Script${NC}"
-    echo -e "${BLUE}========================================${NC}"
-    echo -e "Select components to install (numbers, comma-separated, e.g., 1,2,3)"
-    echo -e ""
-    echo -e "[1] Base Zsh config (history/aliases/completion)"
-    echo -e "[2] Syntax highlighting (zsh-syntax-highlighting)"
-    echo -e "[3] Autosuggestions (zsh-autosuggestions)"
-    echo -e "[4] History substring search (history-substring-search)"
-    echo -e "[5] Powerlevel10k theme (with font install suggestion)"
-    echo -e "[6] Install all"
-    echo -e "[0] Exit"
-    echo -e ""
-    read -p "Your choice: " choice_input
+  if [ "$QUIET_MODE" != true ]; then
+    printf '%b\n' "\n${BLUE}========================================${NC}"
+    printf '%b\n' "${BLUE}Zsh Configuration Script${NC}"
+    printf '%b\n' "${BLUE}========================================${NC}"
+    printf '%b\n' "Select components to install (numbers, comma-separated, e.g., 1,2,3)"
+    printf '%b\n' ""
+    printf '%b\n' "[1] Base Zsh config (history/aliases/completion)"
+    printf '%b\n' "[2] Syntax highlighting (zsh-syntax-highlighting)"
+    printf '%b\n' "[3] Autosuggestions (zsh-autosuggestions)"
+    printf '%b\n' "[4] History substring search (history-substring-search)"
+    printf '%b\n' "[5] Powerlevel10k theme (with font install suggestion)"
+    printf '%b\n' "[6] Install all"
+    printf '%b\n' "[0] Exit"
+    printf '%b\n' ""
+    printf '%s' "Your choice: "
+    IFS= read -r choice_input
   else
     enable_base="yes"
     enable_syntax="yes"
@@ -663,8 +686,8 @@ choose_components() {
     return
   fi
 
-  if [[ "$choice_input" == "0" ]]; then
-    echo -e "${YELLOW}Exiting${NC}"
+  if [ "$choice_input" = "0" ]; then
+    printf '%b\n' "${YELLOW}Exiting${NC}"
     exit 0
   fi
 
@@ -674,23 +697,25 @@ choose_components() {
   enable_history="no"
   enable_p10k="no"
 
-  IFS=',' read -ra choices <<<"$choice_input"
-  for ch in "${choices[@]}"; do
-    ch=$(echo "$ch" | xargs)
+  # POSIX sh 无数组：把逗号换成空格后按词分割
+  choice_list=$(printf '%s' "$choice_input" | tr ',' ' ')
+  for ch in $choice_list; do
+    ch=$(printf '%s' "$ch" | xargs)
     # 修复：使用独立的 if 判断，确保选择 6 时所有变量都被设为 yes
-    if [[ "$ch" == "1" || "$ch" == "6" ]]; then enable_base="yes"; fi
-    if [[ "$ch" == "2" || "$ch" == "6" ]]; then enable_syntax="yes"; fi
-    if [[ "$ch" == "3" || "$ch" == "6" ]]; then enable_autosuggest="yes"; fi
-    if [[ "$ch" == "4" || "$ch" == "6" ]]; then enable_history="yes"; fi
-    if [[ "$ch" == "5" || "$ch" == "6" ]]; then enable_p10k="yes"; fi
-    if [[ ! "$ch" =~ ^[1-6]$ ]]; then
-      echo -e "${YELLOW}Unknown option: $ch, skipping${NC}"
-    fi
+    if [ "$ch" = "1" ] || [ "$ch" = "6" ]; then enable_base="yes"; fi
+    if [ "$ch" = "2" ] || [ "$ch" = "6" ]; then enable_syntax="yes"; fi
+    if [ "$ch" = "3" ] || [ "$ch" = "6" ]; then enable_autosuggest="yes"; fi
+    if [ "$ch" = "4" ] || [ "$ch" = "6" ]; then enable_history="yes"; fi
+    if [ "$ch" = "5" ] || [ "$ch" = "6" ]; then enable_p10k="yes"; fi
+    case "$ch" in
+      [1-6]) ;;
+      *) printf '%b\n' "${YELLOW}Unknown option: $ch, skipping${NC}" ;;
+    esac
   done
 
-  if [[ "$enable_base" == "no" ]] && [[ "$enable_syntax" == "no" ]] &&
-    [[ "$enable_autosuggest" == "no" ]] && [[ "$enable_history" == "no" ]] &&
-    [[ "$enable_p10k" == "no" ]]; then
+  if [ "$enable_base" = "no" ] && [ "$enable_syntax" = "no" ] &&
+    [ "$enable_autosuggest" = "no" ] && [ "$enable_history" = "no" ] &&
+    [ "$enable_p10k" = "no" ]; then
     log_warning "No components selected, installing base config only"
     enable_base="yes"
   fi
@@ -707,16 +732,16 @@ print_summary() {
   log_info "History search: $enable_history"
   log_info "Powerlevel10k: $enable_p10k"
 
-  if [[ "$QUIET_MODE" != true ]]; then
-    echo -e "\n${BLUE}========================================${NC}"
-    echo -e "${BLUE}Installation Summary${NC}"
-    echo -e "${BLUE}========================================${NC}"
-    echo -e "Base config: ${GREEN}$enable_base${NC}"
-    echo -e "Syntax highlighting: ${GREEN}$enable_syntax${NC}"
-    echo -e "Autosuggestions: ${GREEN}$enable_autosuggest${NC}"
-    echo -e "History search: ${GREEN}$enable_history${NC}"
-    echo -e "Powerlevel10k: ${GREEN}$enable_p10k${NC}"
-    echo -e "Log file: ${BLUE}$LOG_FILE${NC}"
+  if [ "$QUIET_MODE" != true ]; then
+    printf '%b\n' "\n${BLUE}========================================${NC}"
+    printf '%b\n' "${BLUE}Installation Summary${NC}"
+    printf '%b\n' "${BLUE}========================================${NC}"
+    printf '%b\n' "Base config: ${GREEN}$enable_base${NC}"
+    printf '%b\n' "Syntax highlighting: ${GREEN}$enable_syntax${NC}"
+    printf '%b\n' "Autosuggestions: ${GREEN}$enable_autosuggest${NC}"
+    printf '%b\n' "History search: ${GREEN}$enable_history${NC}"
+    printf '%b\n' "Powerlevel10k: ${GREEN}$enable_p10k${NC}"
+    printf '%b\n' "Log file: ${BLUE}$LOG_FILE${NC}"
   fi
 }
 
@@ -727,9 +752,9 @@ install_components() {
   mkdir -p ~/.zsh/completions
   mkdir -p ~/.zsh/plugins
 
-  if [[ ! -f ~/.zsh/completions/_git ]]; then
+  if [ ! -f ~/.zsh/completions/_git ]; then
     log_info "Downloading Git completion script..."
-    if [[ "$USE_MIRROR" = true ]]; then
+    if [ "$USE_MIRROR" = true ]; then
       if curl -sL --connect-timeout 10 -o ~/.zsh/completions/_git https://gh-proxy.com/https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.zsh; then
         log_success "Git completion script downloaded"
       else
@@ -744,31 +769,31 @@ install_components() {
     fi
   fi
 
-  if [[ "$enable_syntax" == "yes" ]]; then
+  if [ "$enable_syntax" = "yes" ]; then
     clone_plugin $(mirror_url "https://github.com/zsh-users/zsh-syntax-highlighting.git") \
       "$HOME/.zsh/plugins/zsh-syntax-highlighting" \
       "Syntax highlighting plugin"
   fi
 
-  if [[ "$enable_autosuggest" == "yes" ]]; then
+  if [ "$enable_autosuggest" = "yes" ]; then
     clone_plugin $(mirror_url "https://github.com/zsh-users/zsh-autosuggestions.git") \
       "$HOME/.zsh/plugins/zsh-autosuggestions" \
       "Autosuggestions plugin"
   fi
 
-  if [[ "$enable_history" == "yes" ]]; then
+  if [ "$enable_history" = "yes" ]; then
     clone_plugin $(mirror_url "https://github.com/zsh-users/zsh-history-substring-search.git") \
       "$HOME/.zsh/plugins/zsh-history-substring-search" \
       "History substring search plugin"
   fi
 
-  if [[ "$enable_p10k" == "yes" ]]; then
+  if [ "$enable_p10k" = "yes" ]; then
     install_p10k
   fi
 
-  if [[ "$enable_base" == "yes" ]] || [[ "$enable_syntax" == "yes" ]] ||
-    [[ "$enable_autosuggest" == "yes" ]] || [[ "$enable_history" == "yes" ]] ||
-    [[ "$enable_p10k" == "yes" ]]; then
+  if [ "$enable_base" = "yes" ] || [ "$enable_syntax" = "yes" ] ||
+    [ "$enable_autosuggest" = "yes" ] || [ "$enable_history" = "yes" ] ||
+    [ "$enable_p10k" = "yes" ]; then
     backup_zshrc
     generate_zshrc "$enable_syntax" "$enable_autosuggest" "$enable_history" "$enable_p10k"
   fi
@@ -776,29 +801,30 @@ install_components() {
   verify_installation
   print_summary
 
-  if [[ "$QUIET_MODE" != true ]]; then
-    echo -e ""
-    echo -e "${GREEN}========================================${NC}"
-    echo -e "${GREEN}Installation Complete!${NC}"
-    echo -e "${GREEN}========================================${NC}"
-    echo -e "Run the following to apply changes:"
-    echo -e "  ${YELLOW}source ~/.zshrc${NC}"
-    echo -e "Or restart your terminal."
+  if [ "$QUIET_MODE" != true ]; then
+    printf '%b\n' ""
+    printf '%b\n' "${GREEN}========================================${NC}"
+    printf '%b\n' "${GREEN}Installation Complete!${NC}"
+    printf '%b\n' "${GREEN}========================================${NC}"
+    printf '%b\n' "Run the following to apply changes:"
+    printf '%b\n' "  ${YELLOW}source ~/.zshrc${NC}"
+    printf '%b\n' "Or restart your terminal."
   fi
 
-  if [[ "$enable_p10k" == "yes" ]] && [[ "$QUIET_MODE" != true ]]; then
-    echo -e ""
-    echo -e "${YELLOW}[!] Powerlevel10k will run its configuration wizard on first Zsh startup${NC}"
-    echo -e "${YELLOW}    You can also run: p10k configure${NC}"
+  if [ "$enable_p10k" = "yes" ] && [ "$QUIET_MODE" != true ]; then
+    printf '%b\n' ""
+    printf '%b\n' "${YELLOW}[!] Powerlevel10k will run its configuration wizard on first Zsh startup${NC}"
+    printf '%b\n' "${YELLOW}    You can also run: p10k configure${NC}"
   fi
 
-  if [[ "$DISTRO" != "macOS" ]] && [[ "$NON_INTERACTIVE" == false ]] && [[ "$QUIET_MODE" != true ]]; then
-    local current_shell=$(basename "$SHELL")
-    if [[ "$current_shell" != "zsh" ]]; then
-      echo -e ""
-      echo -e "${BLUE}[?] Current default shell is $current_shell. Change to Zsh?${NC}"
-      read -p "Change to Zsh? (y/N): " change_shell
-      if [[ "$change_shell" =~ ^[Yy]$ ]]; then
+  if [ "$DISTRO" != "macOS" ] && [ "$NON_INTERACTIVE" = false ] && [ "$QUIET_MODE" != true ]; then
+    current_shell=$(basename "$SHELL")
+    if [ "$current_shell" != "zsh" ]; then
+      printf '%b\n' ""
+      printf '%b\n' "${BLUE}[?] Current default shell is $current_shell. Change to Zsh?${NC}"
+      printf '%s' "Change to Zsh? (y/N): "
+      IFS= read -r change_shell
+      if [ "$change_shell" = "y" ] || [ "$change_shell" = "Y" ]; then
         if chsh -s "$(command -v zsh)"; then
           log_success "Default shell changed to Zsh"
         else
@@ -806,11 +832,11 @@ install_components() {
         fi
       fi
     fi
-  elif [[ "$DISTRO" == "macOS" ]] && [[ "$NON_INTERACTIVE" == false ]] && [[ "$QUIET_MODE" != true ]]; then
-    echo -e ""
-    echo -e "${YELLOW}[!] To change default shell on macOS:${NC}"
-    echo -e "    ${YELLOW}chsh -s /bin/zsh${NC}"
-    echo -e "    (Note: sudo/doas is not needed for chsh on macOS)"
+  elif [ "$DISTRO" = "macOS" ] && [ "$NON_INTERACTIVE" = false ] && [ "$QUIET_MODE" != true ]; then
+    printf '%b\n' ""
+    printf '%b\n' "${YELLOW}[!] To change default shell on macOS:${NC}"
+    printf '%b\n' "    ${YELLOW}chsh -s /bin/zsh${NC}"
+    printf '%b\n' "    (Note: sudo/doas is not needed for chsh on macOS)"
   fi
 }
 
@@ -819,41 +845,41 @@ install_components() {
 # ============================================================
 verify_installation() {
   log_info "Verifying installation..."
-  local failed=false
+  failed=false
 
-  if [[ ! -f ~/.zshrc ]]; then
+  if [ ! -f ~/.zshrc ]; then
     log_error ".zshrc not generated"
     failed=true
   fi
 
-  if [[ "$enable_syntax" == "yes" ]] && [[ ! -f ~/.zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]]; then
+  if [ "$enable_syntax" = "yes" ] && [ ! -f ~/.zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]; then
     log_error "Syntax highlighting plugin verification failed"
     failed=true
   fi
 
-  if [[ "$enable_autosuggest" == "yes" ]] && [[ ! -f ~/.zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh ]]; then
+  if [ "$enable_autosuggest" = "yes" ] && [ ! -f ~/.zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh ]; then
     log_error "Autosuggestions plugin verification failed"
     failed=true
   fi
 
-  if [[ "$enable_history" == "yes" ]] && [[ ! -f ~/.zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh ]]; then
+  if [ "$enable_history" = "yes" ] && [ ! -f ~/.zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh ]; then
     log_error "History search plugin verification failed"
     failed=true
   fi
 
-  if [[ "$enable_p10k" == "yes" ]] && [[ ! -f ~/powerlevel10k/powerlevel10k.zsh-theme ]]; then
+  if [ "$enable_p10k" = "yes" ] && [ ! -f ~/powerlevel10k/powerlevel10k.zsh-theme ]; then
     log_error "Powerlevel10k theme verification failed"
     failed=true
   fi
 
-  if [[ -f ~/.zshrc ]]; then
+  if [ -f ~/.zshrc ]; then
     if ! zsh -n ~/.zshrc 2>/dev/null; then
       log_error ".zshrc syntax error"
       failed=true
     fi
   fi
 
-  if [[ "$failed" == false ]]; then
+  if [ "$failed" = false ]; then
     log_success "Verification passed"
   else
     log_warning "Verification found issues, but configuration may still work"
@@ -864,41 +890,42 @@ verify_installation() {
 # 卸载功能
 # ============================================================
 uninstall() {
-  if [[ "$QUIET_MODE" != true ]]; then
-    echo -e "${RED}[!] This will remove all Zsh configurations and plugins${NC}"
-    echo -e "${RED}    Including: ~/.zshrc, ~/.zsh/, ~/powerlevel10k/, ~/.p10k.zsh${NC}"
+  if [ "$QUIET_MODE" != true ]; then
+    printf '%b\n' "${RED}[!] This will remove all Zsh configurations and plugins${NC}"
+    printf '%b\n' "${RED}    Including: ~/.zshrc, ~/.zsh/, ~/powerlevel10k/, ~/.p10k.zsh${NC}"
   fi
 
-  if [[ "$NON_INTERACTIVE" == false ]] && [[ "$QUIET_MODE" != true ]]; then
-    read -p "Are you sure? (y/N): " confirm
+  if [ "$NON_INTERACTIVE" = false ] && [ "$QUIET_MODE" != true ]; then
+    printf '%s' "Are you sure? (y/N): "
+    IFS= read -r confirm
   else
     confirm="y"
   fi
 
-  if [[ "$confirm" =~ ^[Yy]$ ]]; then
-    local backup_dir="$HOME/.zsh_backup_$(date +%Y%m%d_%H%M%S)"
+  if [ "$confirm" = "y" ] || [ "$confirm" = "Y" ]; then
+    backup_dir="$HOME/.zsh_backup_$(date +%Y%m%d_%H%M%S)"
 
-    local has_files=false
-    [[ -f ~/.zshrc || -d ~/.zsh || -d ~/powerlevel10k || -f ~/.p10k.zsh ]] && has_files=true
+    has_files=false
+    [ -f ~/.zshrc || -d ~/.zsh || -d ~/powerlevel10k || -f ~/.p10k.zsh ] && has_files=true
 
-    if [[ "$has_files" == true ]]; then
+    if [ "$has_files" = true ]; then
       mkdir -p "$backup_dir"
-      [[ -f ~/.zshrc ]] && cp ~/.zshrc "$backup_dir/" 2>/dev/null
-      [[ -d ~/.zsh ]] && cp -r ~/.zsh "$backup_dir/" 2>/dev/null
-      [[ -d ~/powerlevel10k ]] && cp -r ~/powerlevel10k "$backup_dir/" 2>/dev/null
-      [[ -f ~/.p10k.zsh ]] && cp ~/.p10k.zsh "$backup_dir/" 2>/dev/null
+      [ -f ~/.zshrc ] && cp ~/.zshrc "$backup_dir/" 2>/dev/null
+      [ -d ~/.zsh ] && cp -r ~/.zsh "$backup_dir/" 2>/dev/null
+      [ -d ~/powerlevel10k ] && cp -r ~/powerlevel10k "$backup_dir/" 2>/dev/null
+      [ -f ~/.p10k.zsh ] && cp ~/.p10k.zsh "$backup_dir/" 2>/dev/null
       log_info "Backup saved to: $backup_dir"
     fi
 
     rm -rf ~/.zshrc ~/.zsh/ ~/powerlevel10k/ ~/.p10k.zsh
     log_success "Configuration removed"
 
-    if [[ "$QUIET_MODE" != true ]]; then
-      echo -e "${YELLOW}[!] To restore default shell, run: chsh -s /bin/bash, or you'll not be able to login your account! ${NC}"
+    if [ "$QUIET_MODE" != true ]; then
+      printf '%b\n' "${YELLOW}[!] To restore default shell, run: chsh -s /bin/bash, or you'll not be able to login your account! ${NC}"
     fi
   else
-    if [[ "$QUIET_MODE" != true ]]; then
-      echo -e "${YELLOW}Uninstall cancelled${NC}"
+    if [ "$QUIET_MODE" != true ]; then
+      printf '%b\n' "${YELLOW}Uninstall cancelled${NC}"
     fi
   fi
   exit 0
@@ -929,7 +956,7 @@ parse_args() {
       exit 0
       ;;
     *)
-      echo -e "${RED}[✗] Unknown option: $arg${NC}"
+      printf '%b\n' "${RED}[✗] Unknown option: $arg${NC}"
       show_help
       exit 1
       ;;
@@ -941,10 +968,10 @@ parse_args() {
 # 清理函数（退出时执行）
 # ============================================================
 cleanup() {
-  if [[ $arg != -v ]] && [[ $arg != --version ]] && [[ $arg != -h ]] && [[ $arg != --help ]]; then
+  if [ "${arg:-}" != "-v" ] && [ "${arg:-}" != "--version" ] && [ "${arg:-}" != "-h" ] && [ "${arg:-}" != "--help" ]; then
     log_info "Script finished"
-    if [[ "$QUIET_MODE" != true ]]; then
-      echo -e "${BLUE}[*] Full log saved to: $LOG_FILE${NC}"
+    if [ "$QUIET_MODE" != true ]; then
+      printf '%b\n' "${BLUE}[*] Full log saved to: $LOG_FILE${NC}"
     fi
   fi
 }
@@ -954,9 +981,9 @@ trap cleanup EXIT
 # 主函数
 # ============================================================
 main() {
-  echo -e "${BLUE}Zsh Configuration Script - Started${NC}" >"$LOG_FILE"
-  echo -e "${BLUE}Time: $(date)${NC}" >>"$LOG_FILE"
-  echo -e "${BLUE}========================================${NC}" >>"$LOG_FILE"
+  printf '%b\n' "${BLUE}Zsh Configuration Script - Started${NC}" >"$LOG_FILE"
+  printf '%b\n' "${BLUE}Time: $(date)${NC}" >>"$LOG_FILE"
+  printf '%b\n' "${BLUE}========================================${NC}" >>"$LOG_FILE"
 
   parse_args "$@"
   check_disk_space

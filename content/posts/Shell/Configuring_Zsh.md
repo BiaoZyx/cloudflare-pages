@@ -10,12 +10,12 @@ summary = "Zsh的简单无框架配置"
 本文档提供一套完整的 Zsh 配置方案，涵盖补全系统、历史搜索、语法高亮、自动建议及 `Powerlevel10k` 主题。所有步骤手动整合，不使用 `Oh My Zsh` 等框架，配置完全透明可控。
 
 ## 在线安装
-你可以通过以下脚本进行在线安装：
+你可以通过以下脚本进行在线安装（两个脚本均为 POSIX `sh`，不再需要 `bash`）：
 ```sh
-curl https://biaozyx.pages.dev/scripts/setup_zsh.sh | bash    # 适用于大部分发行版
+curl -fsSL https://biaozyx.pages.dev/scripts/setup_zsh.sh | sh    # 适用于大部分发行版
 ```
 ```sh
-curl https://biaozyx.pages.dev/scripts/setup_zsh-alpine.sh | sh    # 专为 Alpine Linux 定制
+curl -fsSL https://biaozyx.pages.dev/scripts/setup_zsh-alpine.sh | sh    # 专为 Alpine Linux 定制
 ```
 > 致大陆用户：
 > 由于大部分镜像站不复存在，现推荐[GH-Proxy.com](https://gh-proxy.com/)。也欢迎告诉我新的镜像站至[我的邮箱](mailto:BiaoZyx@outlook.com)！
@@ -49,7 +49,7 @@ sudo dnf install zsh
 ### 1.2 设为默认 Shell
 
 ```sh
-chsh -s /usr/bin/zsh
+chsh -s "$(command -v zsh)"
 ```
 
 重新登录后生效。
@@ -137,7 +137,7 @@ bindkey '^[^[[C' forward-word                   # Alacritty 等终端的序列
 # 别名设置
 # ======================================================
 # ls 设置
-if command -v eza &> /dev/null; then           ## 如果 eza 存在，那么用 eza 替代 ls 
+if command -v eza >/dev/null 2>&1; then         ## 如果 eza 存在，那么用 eza 替代 ls
     alias ls='eza --icons --sort=type --color=always' # eza 永久显示颜色和 nerd 图标，并按文件类型排序
     alias ll='ls -l --git --group --links'      # eza 列表，显示 git, 组权限和硬链接数量
     alias la='ls -A'                            # 显示除 '.' '..' 的所有项目
@@ -173,12 +173,12 @@ alias ip='ip --color=auto'                      # iproute2
 ```zsh
 # Git 类
 alias g=git                                     # git -> g
-alias gst='g status' 
-alias gp='g pull'
-alias gpu='g push'
+alias gst='git status'
+alias gp='git pull'
+alias gpu='git push'
 alias gc='git commit'
 alias gd='git diff'
-alias gl='git log --online --gragh'
+alias gl='git log --oneline --graph'
 ```
 
 ```zsh
@@ -218,12 +218,12 @@ extract() {
 ### 3.1 下载 Git 补全脚本
 使用官方地址：
 ```sh
-curl -o ~/.zsh/completions/_git https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.zsh
+curl -fsSL -o ~/.zsh/completions/_git https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.zsh
 ```
 
 或者使用镜像：
 ```sh
-curl -o ~/.zsh/completions/_git https://gh-proxy.com/https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.zsh
+curl -fsSL -o ~/.zsh/completions/_git https://gh-proxy.com/https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.zsh
 ```
 
 ### 3.2 初始化补全系统
@@ -249,7 +249,7 @@ zstyle ':completion:*' completer _expand _complete _ignored
 
 ### 4.1 下载插件
 
-```zsh
+```sh
 # 语法高亮（命令有效/无效变色）
 git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.zsh/plugins/zsh-syntax-highlighting
 
@@ -302,7 +302,7 @@ git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/powerlevel10k
 
 ### 5.2 加载主题
 
-在 `~/.zshrc` 中添加（放在插件加载之前）：
+在 `~/.zshrc` 中添加（放在插件加载之后，即最后加载主题；如果启用 instant prompt，它仍须放在文件最前面）：
 
 ```zsh
 # ============================================
@@ -340,6 +340,8 @@ p10k configure
 ## 6. 按键绑定
 
 ### 6.1 历史子串搜索绑定
+
+> 如果你希望上下键在多行编辑时仍能移动光标，请看第 7 节的进阶绑定方案。
 
 ```zsh
 # ============================================
@@ -406,7 +408,7 @@ bindkey '^R' history-incremental-search-backward
 | 重新加载配置 | `source ~/.zshrc` |
 | 编辑配置文件 | `vim ~/.zshrc` |
 | 重新运行 p10k 向导 | `p10k configure` |
-| 查看已加载的插件 | `echo $ZSH_PLUGINS` |
+| 查看已安装的插件 | `ls ~/.zsh/plugins` |
 | 查看所有按键绑定 | `bindkey` |
 | 查看补全函数位置 | `echo $fpath` |
 | 更新插件 | `cd ~/.zsh/plugins/<name> && git pull` |
