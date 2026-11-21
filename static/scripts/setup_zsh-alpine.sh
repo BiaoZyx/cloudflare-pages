@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 # ============================================================
-# Alpine Linux Zsh 安装脚本 (Version 1.9)
+# Alpine Linux Zsh 安装脚本 (Version 1.10)
 # ============================================================
 
 set -e
@@ -141,6 +141,12 @@ bindkey '^[d' kill-word
 
 bindkey '^[[3~' delete-char
 bindkey '^[[3;5~' kill-word
+
+# Ctrl+Backspace / Alt+Backspace: kill the word before the cursor
+bindkey '^H' backward-kill-word          # Ctrl+Backspace (most terminals)
+bindkey '^[[7;5~' backward-kill-word     # Ctrl+Backspace (xterm modifyOtherKeys)
+bindkey '^[^?' backward-kill-word        # Alt+Backspace
+bindkey '^[^H' backward-kill-word        # Alt+Backspace (terminals with BS=^H)
 
 bindkey '^[[H' beginning-of-line
 bindkey '^[[1~' beginning-of-line

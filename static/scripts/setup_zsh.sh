@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # ============================================================
-# Zsh 交互式配置脚本 (Version 2.7)
+# Zsh 交互式配置脚本 (Version 2.8)
 # ============================================================
 # 功能说明：
 #   1. 自动检测 Linux 发行版（Debian/Ubuntu/Arch/Fedora/Void/OpenWRT/Alpine）和 macOS
@@ -29,7 +29,7 @@ NC='\033[0m'
 # ============================================================
 # 运行时配置（会被命令行参数修改）
 # ============================================================
-VERSION=2.7
+VERSION=2.8
 USE_MIRROR=false                                         # 是否使用 kkgithub.com 镜像加速 git clone
 NON_INTERACTIVE=false                                    # 非交互模式（-y）：跳过所有用户询问，采用默认值
 QUIET_MODE=false                                         # 静默模式（-q）：不输出到终端，只写日志
@@ -410,6 +410,12 @@ bindkey '^[d' kill-word
 
 bindkey '^[[3~' delete-char
 bindkey '^[[3;5~' kill-word
+
+# Ctrl+Backspace / Alt+Backspace: kill the word before the cursor
+bindkey '^H' backward-kill-word          # Ctrl+Backspace (most terminals)
+bindkey '^[[7;5~' backward-kill-word     # Ctrl+Backspace (xterm modifyOtherKeys)
+bindkey '^[^?' backward-kill-word        # Alt+Backspace
+bindkey '^[^H' backward-kill-word        # Alt+Backspace (terminals with BS=^H)
 
 bindkey '^[[H' beginning-of-line
 bindkey '^[[1~' beginning-of-line
